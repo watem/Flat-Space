@@ -1,6 +1,7 @@
 public abstract class Technology {
-  private String name;
-  private int cost;
+  String name;
+  int cost;
 
-  public abstract void research();
+
+  public abstract void unlock(Nation nation);
 }

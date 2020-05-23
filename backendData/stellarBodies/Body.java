@@ -9,6 +9,7 @@ public abstract class Body {
   private Availability resourceAvail;
   private List<Body> Satellites;
   private Body parentBody;
+  private int depth;
 
 
   public Body(String aName, double aMass, double aRadius, ResourceSet aResources, Availability avail) {

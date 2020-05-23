@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class Nation {
   List<Technology> discoveredTechs;
   List<Colony> colonies;
@@ -5,12 +8,30 @@ public class Nation {
   private String name;
   private NationTech ownedTechs;
 
-  private double mineRate;
+  private HashMap<String, Integer> repeatableTechs;
+  private Set<String> unlockedTechs;
+  private List<Technology> availableTechnologies;
 
-  public void updateMineRate(int rate) {
+  public void updateRate(String type) {
 
-    for (Colony c:colonies) {
-      c.updateMineRate();
+  }
+
+  public HashMap getRepeatableTechs() {
+    if (repeatableTechs==null) {
+      repeatableTechs = new HashMap<String, Integer>();
     }
+    return repeatableTechs;
+  }
+  public HashMap getUnlockedTechs() {
+    if (unlockedTechs==null) {
+      unlockedTechs = new HashSet<String>();
+    }
+    return unlockedTechs;
+  }
+  public List getAvailableTechnologies() {
+    if (availableTechnologies==null) {
+      availableTechnologies = new ArrayList<Technology>();
+    }
+    return availableTechnologies;
   }
 }
