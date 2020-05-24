@@ -7,9 +7,10 @@ public abstract class Body {
   private double radius;
   private ResourceSet resources, initialResources;
   private Availability resourceAvail;
-  private List<Body> Satellites;
+  private List<Body> satellites;
   private Body parentBody;
   private int depth;
+  private RotationalVectors vectors;
 
 
   public Body(String aName, double aMass, double aRadius, ResourceSet aResources, Availability avail) {
@@ -32,5 +33,9 @@ public abstract class Body {
 
   public void updateAvail() {
 
+  }
+
+  public RotationalVectors getVectors() {
+    return vectors;
   }
 }

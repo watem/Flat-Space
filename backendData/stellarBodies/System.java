@@ -7,4 +7,5 @@ public class System {
   List<Asteroid> asteroids;
   List<Comet> comets;
   List<PlanarEntrance> planarEntrances;
+  Body principleBody;
 }
