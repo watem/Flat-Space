@@ -1,3 +1,7 @@
+package FlatSpace.backendData.stellarBodies;
+
+import FlatSpace.Controller.TO.Coordinates;
+
 public class RotationalVectors {
   private double theta, omega, r;
 
@@ -14,14 +18,17 @@ public class RotationalVectors {
     theta +=omega*dt;
     theta %= 360;
   }
-  public void setR(double distance){
+  public RotationalVectors setR(double distance){
     r = distance;
+    return this;
   }
-  public void setOmega(double angularV) {
+  public RotationalVectors setOmega(double angularV) {
     omega = angularV;
+    return this;
   }
-  public void setTheta(double angle) {
+  public RotationalVectors setTheta(double angle) {
     theta = angle;
+    return this;
   }
 
   public Coordinates transform() {

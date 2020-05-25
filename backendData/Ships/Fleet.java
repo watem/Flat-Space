@@ -1,3 +1,14 @@
+package FlatSpace.backendData.Ships;
+
+import java.util.List;
+
+import FlatSpace.backendData.mechanics.Location;
+import FlatSpace.backendData.mechanics.Velocity;
+import FlatSpace.backendData.planarSpace.PlanarLocation;
+import FlatSpace.backendData.stellarBodies.Body;
+import FlatSpace.backendData.stellarBodies.PlanarEntrance;
+import FlatSpace.backendData.stellarBodies.SystemLocation;
+
 public class Fleet {
   Location currentLocation;
   double mass;
@@ -11,6 +22,7 @@ public class Fleet {
   Body landed;                    //null if in motion, body
 
   public int getMaxPlanarMass() {
+	return 0;
 
   }
   public void updatePosition() {
@@ -23,6 +35,7 @@ public class Fleet {
     } else {
 
     }
+	return 0;
   }
 
   public void enterPlanarSpace(PlanarEntrance portal) {
@@ -42,7 +55,8 @@ public class Fleet {
         return false;
       }
     } else if (currentLocation instanceof SystemLocation) {
-      if (((SystemLocation)currentLocation).getSystem().equals(target.getSystem())) {
+      if (((SystemLocation)currentLocation).getCurrentSystem().equals(target.getSystem())) {
+    	  return false;
         //TODO
         //determine current primary body
         //determine if they share common spheres, determine smallest common spheres
@@ -54,9 +68,9 @@ public class Fleet {
         // if target is higher than perigee, go to perigee, then raise apogee to match target, then get to apogee, and circularize, then rendezVouz
 
       } else if (autoPlane) {                 //different system, but can auto transit
-        PlanarEntrance closestE1, closestE2;
+        PlanarEntrance closestE1 = null, closestE2 = null;
         int minDistance = -1;
-        for (PlanarEntrance e1: ((SystemLocation)currentLocation).getSystem().getPlanarEntrances()) {
+        for (PlanarEntrance e1: ((SystemLocation)currentLocation).getCurrentSystem().getPlanarEntrances()) {
           for (PlanarEntrance e2: target.getSystem().getPlanarEntrances()) {
             int dis = e1.getPlanarSideEntrance().getDistance(e2.getPlanarSideEntrance());
             if (minDistance == -1) {
@@ -70,7 +84,7 @@ public class Fleet {
             }
           }
         }
-        if (minDistance = -1) {               //no detected path
+        if (minDistance == -1) {               //no detected path
           return false;
         }
         goToBody(closestE1);
@@ -84,16 +98,22 @@ public class Fleet {
     } else { //invalid location type
       return false;
     }
+	return false; //TODO?
   }
 
-  public boolean matchOrbit(Body target) {
+  private void planarMoveTo(Body target) {
+	// TODO Auto-generated method stub
+	
+}
+public boolean matchOrbit(Body target) {
+	return false;
 
   }
   public boolean rendezVouz(Body target) {
-
+	  return false;
   }
   public boolean land(Body target) {
-
+	  return false;
   }
 
 

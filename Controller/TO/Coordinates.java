@@ -1,3 +1,5 @@
+package FlatSpace.Controller.TO;
+
 public class Coordinates {
   private double x,y;
   public Coordinates(double a, double b) {

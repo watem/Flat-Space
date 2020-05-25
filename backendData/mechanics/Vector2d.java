@@ -1,8 +1,10 @@
+package FlatSpace.backendData.mechanics;
+
 public class Vector2d implements D2Vector {
   private double x, y;
-  public Vector2d(int x, int y) {
-    this.x = x;
-    this.y = y;
+  public Vector2d(Number number, Number number2) {
+    this.x = (double) number;
+    this.y = (double) number2;
   }
   public Vector2d(double x, double y) {
     this.x = x;
@@ -12,22 +14,22 @@ public class Vector2d implements D2Vector {
     this(a.x(), a.y());
   }
   public static Vector add(Vector a, Vector b) {
-    return new Vector2d(a.x()+b.x(), a.y()+b.y());
+    return new Vector2d(a.x().doubleValue()+b.x().doubleValue(), a.y().doubleValue()+b.y().doubleValue());
   }
   public static Vector subtract(Vector a, Vector b) {
-    return new Vector2d(a.x()-b.x(), a.y()-b.y());
+    return new Vector2d(a.x().doubleValue()-b.x().doubleValue(), a.y().doubleValue()-b.y().doubleValue());
   }
   public static Vector multiply(Vector a, double b) {
-    return new Vector2d(a.x()*b, a.y()*b);
+    return new Vector2d(a.x().doubleValue()*b, a.y().doubleValue()*b);
   }
   public Vector add(Vector a) {
-    this.x+=a.x();
-    this.y+=a.y();
+    this.x+=a.x().doubleValue();
+    this.y+=a.y().doubleValue();
     return this;
   }
   public Vector subtract(Vector a) {
-    this.x-=a.x();
-    this.y-=a.y();
+    this.x-=a.x().doubleValue();
+    this.y-=a.y().doubleValue();
     return this;
   }
   public Vector multiply(double c) {
@@ -48,4 +50,9 @@ public class Vector2d implements D2Vector {
   public Number y() {
     return this.y;
   }
+@Override
+public Vector transpose() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

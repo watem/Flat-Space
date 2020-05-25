@@ -1,12 +1,19 @@
+package FlatSpace.backendData.nations;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import FlatSpace.backendData.nations.technologies.Technology;
+import FlatSpace.backendData.nations.technologies.Unlockable;
 
 public class Nation {
   List<Technology> discoveredTechs;
   List<Colony> colonies;
   private GovernmentType government;
   private String name;
-  private NationTech ownedTechs;
 
   private HashMap<String, Integer> repeatableTechs;
   private Set<String> unlockedTechs;
@@ -22,7 +29,7 @@ public class Nation {
     }
     return repeatableTechs;
   }
-  public HashMap getUnlockedTechs() {
+  public Set getUnlockedTechs() {
     if (unlockedTechs==null) {
       unlockedTechs = new HashSet<String>();
     }
@@ -34,4 +41,14 @@ public class Nation {
     }
     return availableTechnologies;
   }
+
+public int getMineMultiplier() {
+	// TODO Auto-generated method stub
+	return 0;
+}
+
+public void removeAvailableTechnology(Technology tech) {
+	getAvailableTechnologies().remove(tech);
+	
+}
 }

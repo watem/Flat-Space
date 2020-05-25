@@ -1,3 +1,9 @@
+package FlatSpace.backendData.mechanics;
+
+import java.util.Set;
+
+import FlatSpace.backendData.nations.Colony;
+
 public abstract class Task {
   private static Set<Task> allTasks;
   private int cost;
@@ -8,11 +14,11 @@ public abstract class Task {
   private ResourceSet materialCost;
 
   public Task(int cost, IntContainer progress, Colony colony, ResourceSet materialCost) {
-    this.cost = cost;
-    this.progress = progress;
-    this.totalCost = cost;
-    this.colony = colony;
-    if (colony.getResources().subtract(materialCost)) {
+    this.setCost(cost);
+    this.setProgress(progress);
+    this.setTotalCost(cost);
+    this.setColony(colony);
+    if (colony.getStockpile().subtract(materialCost)) {
       allTasks.add(this);
     } else {
       //error
@@ -20,32 +26,66 @@ public abstract class Task {
   }
   public Task(int cost, int remainingCost, IntContainer progress, Colony colony, ResourceSet materialCost) {
     this(cost, progress, colony, materialCost);
-    this.cost = remainingCost;
+    this.setCost(remainingCost);
   }
 
   public void work() {
     if (finished) {
       return;
     }
-    if (cost<progress.i) {
+    if (getCost()<getProgress().i) {
       finish();
       finished = true;
       allTasks.remove(this);
     } else {
-      cost -= progress.i;
+      setCost(getCost() - getProgress().i);
     }
   }
   public void cancel() {
-    if (materialCost!=null) {
-      if ((double)cost/totalCost>=0.9) {
-        colony.getResources().add(materialCost);
+    if (getMaterialCost()!=null) {
+      if ((double)getCost()/getTotalCost()>=0.9) {
+        getColony().getStockpile().add(getMaterialCost());
       } else {
-        colony.getResources().add(materialCost.multiplyAll(0.5));
+        getColony().getStockpile().add(getMaterialCost().multiplyAll(0.5));
       }
     }
     finished = true;
     allTasks.remove(this);
   }
 
-  private abstract void finish();
+  public abstract void finish();
+//public IntContainer getProgress() {
+//	// TODO Auto-generated method stub
+//	return null;
+//}
+public int getCost() {
+	return cost;
+}
+public void setCost(int cost) {
+	this.cost = cost;
+}
+public int getTotalCost() {
+	return totalCost;
+}
+public void setTotalCost(int totalCost) {
+	this.totalCost = totalCost;
+}
+public ResourceSet getMaterialCost() {
+	return materialCost;
+}
+public void setMaterialCost(ResourceSet materialCost) {
+	this.materialCost = materialCost;
+}
+public IntContainer getProgress() {
+	return progress;
+}
+public void setProgress(IntContainer progress) {
+	this.progress = progress;
+}
+public Colony getColony() {
+	return colony;
+}
+public void setColony(Colony colony) {
+	this.colony = colony;
+}
 }

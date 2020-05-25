@@ -1,3 +1,7 @@
+package FlatSpace.backendData.installations;
+
+import FlatSpace.backendData.nations.Colony;
+
 public class NavalShipyard extends Shipyard {
 
   public NavalShipyard(String aName, Colony colony) {

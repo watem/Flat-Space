@@ -1,3 +1,5 @@
+package FlatSpace.backendData.mechanics;
+
 public class Location {
   private double x;
   private double y;

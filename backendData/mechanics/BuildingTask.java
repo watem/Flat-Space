@@ -1,3 +1,7 @@
+package FlatSpace.backendData.mechanics;
+
+import FlatSpace.backendData.nations.Colony;
+
 public class BuildingTask extends Task {
   IntContainer building;
   int number;
@@ -9,10 +13,9 @@ public class BuildingTask extends Task {
     this.building = building;
     this.number = number;
     if (number > 0) {
-      task = new individualBuildingTask(cost, cost, progress, building, number, colony, this, materialCost);
+    	childTask = new IndividualBuildingTask(cost, cost, progress, building, number, colony, this, materialCost);
     }
   }
-  private void finish() {}
   public void cancel() {
     cancelled = true;
     childTask.cancel();
@@ -34,36 +37,42 @@ public class BuildingTask extends Task {
       this.parentTask = parentTask;
       this.individualCost = materialCost;
     }
-    private void finish() {
-      int buildingsMade = 1+(progress.i-cost)/totalCost;
+    public void finish() {
+      int buildingsMade = 1+(getProgress().i-getCost())/getTotalCost();
       if (buildingsMade>number) {
-        buildingsMade = number
+        buildingsMade = number;
       }
       building.i += buildingsMade;
 
       number-=buildingsMade;
 
       if (number>0) {
-        int remainingCost = (progress.i-cost)%totalCost;
-        new individualBuildingTask(totalCost, remainingCost, progress, building, number);
+        int remainingCost = (getProgress().i-getCost())%getTotalCost();
+        new IndividualBuildingTask(getTotalCost(), remainingCost, getProgress(), building, number, getColony(), parentTask, getMaterialCost());
       }
     }
     public void cancel() {
       if(!parentTask.isCancelled()) {
-        parentTask.cancel()
+        parentTask.cancel();
       } else {
-        if (materialCost!=null) {
-          if ((double)cost/totalCost>=0.9) {
-            colony.getResources().add(materialCost);
+        if (getMaterialCost()!=null) {
+          if ((double)getCost()/getTotalCost()>=0.9) {
+            getColony().getStockpile().add(getMaterialCost());
           } else {
-            colony.getResources().add(materialCost.multiplyAll(0.5));
+            getColony().getStockpile().add(getMaterialCost().multiplyAll(0.5));
           }
         }
         --number;
         if (number > 0 ) {
-          colony.getResources().add(materialCost.multiplyAll(number));
+          getColony().getStockpile().add(getMaterialCost().multiplyAll(number));
         }
       }
     }
   }
+
+@Override
+public void finish() {
+	// TODO Auto-generated method stub
+	
+}
 }

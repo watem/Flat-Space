@@ -1,3 +1,11 @@
+package FlatSpace.backendData.nations.technologies;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import FlatSpace.backendData.nations.Nation;
+
 public class Unlockable extends Technology {
   private static List<Unlockable> allUnlockables;
   public static List<Unlockable> tierZero;
@@ -10,9 +18,9 @@ public class Unlockable extends Technology {
     allUnlockables.add(this);
   }
 
-  public void unlock() {
-    nation.getUnlockedTechs().add(type);
-    this.getNextTechs();
+  public void unlock(Nation nation) {
+//    nation.getUnlockedTechs().add(type);
+    this.getNextTechs(nation);
     nation.removeAvailableTechnology(this);
   }
   private void getNextTechs(Nation nation) {
@@ -22,11 +30,11 @@ public class Unlockable extends Technology {
 
       for (Unlockable v:dependancies) {             //check if all dependancies are now met
         boolean unlocked = false;
-        for (String w:nation.getUnlockedTechs()) {
-          if (w.equals(v.name)) {
-            unlocked = true;
-          }
-        }
+//        for (Unlockable w:nation.getUnlockedTechs()) {
+//          if (w.equals(v.name)) {
+//            unlocked = true;
+//          }
+//        }
         if (!unlocked) {
           allDependanciesUnlocked = false;
         }

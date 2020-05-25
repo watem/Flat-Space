@@ -1,3 +1,12 @@
+package FlatSpace.backendData.installations;
+
+import FlatSpace.backendData.mechanics.Constants;
+import FlatSpace.backendData.mechanics.IntContainer;
+import FlatSpace.backendData.mechanics.ResourceSet;
+import FlatSpace.backendData.mechanics.ShipyardTask;
+import FlatSpace.backendData.nations.Colony;
+import FlatSpace.backendData.shipDesign.ShipDesign;
+
 public abstract class Shipyard {
   Colony home;
   String name;
@@ -10,12 +19,13 @@ public abstract class Shipyard {
 
 
   public boolean increaseSize(int amount) {
-    multiplier = slipways/costDivisor*;
+	  //TODO
+    int multiplier = slipways/costDivisor; //* something
 
     ResourceSet increaseCost = resourceCost.clone();
-    increaseCost.multiply(multiplier);
-    if (home.getStockPile().subtract(increaseCost)) {
-      new ShipyardTask();
+    increaseCost.multiplyAll(multiplier);
+    if (home.getStockpile().subtract(increaseCost)) {
+      new ShipyardTask(multiplier, multiplier, null, home, increaseCost); //TODO
       return true;
     } else {
       return false;

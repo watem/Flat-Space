@@ -1,11 +1,24 @@
+package FlatSpace.backendData.stellarBodies;
+
+import java.util.Map;
+
 public class Star extends Body {
-  private String classification;
-  public Star generateStar() {
+  
+public Star(String aName, double aMass, double aRadius, StellarSystem sys) {
+		super(aName, aMass, aRadius, sys);
+		sys.getStars().add(this);
+	}
+private String classification;
+  public static Star generateStar(StellarSystem system) {
     int totalWeight = 0;
-    Map starWeightingMap = UniverseData.getWeightByStarType();
+    Map<String, Integer> starWeightingMap = UniverseData.getWeightByStarType();
     for (int weight:starWeightingMap.values()) {
       totalWeight += weight;
     }
+    
+    
+    
+    return null;
   }
 
 }
