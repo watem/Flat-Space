@@ -1,7 +1,7 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
-import FlatSpace.backendData.mechanics.Availability;
-import FlatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.mechanics.Availability;
+import flatSpace.backendData.mechanics.ResourceSet;
 
 public class Asteroid extends Body {
 

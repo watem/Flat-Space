@@ -1,9 +1,9 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
-import FlatSpace.backendData.Ships.Ship;
-import FlatSpace.backendData.installations.Shipyard;
-import FlatSpace.backendData.nations.Colony;
-import FlatSpace.backendData.shipDesign.ShipDesign;
+import flatSpace.backendData.Ships.Ship;
+import flatSpace.backendData.installations.Shipyard;
+import flatSpace.backendData.nations.Colony;
+import flatSpace.backendData.shipDesign.ShipDesign;
 
 public class ShipTask extends Task{
   ShipDesign ship;

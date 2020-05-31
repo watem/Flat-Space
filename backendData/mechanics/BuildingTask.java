@@ -1,6 +1,6 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
-import FlatSpace.backendData.nations.Colony;
+import flatSpace.backendData.nations.Colony;
 
 public class BuildingTask extends Task {
   IntContainer building;

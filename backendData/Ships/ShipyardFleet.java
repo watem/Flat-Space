@@ -1,6 +1,6 @@
-package FlatSpace.backendData.Ships;
+package flatSpace.backendData.Ships;
 
-import FlatSpace.backendData.stellarBodies.PlanarEntrance;
+import flatSpace.backendData.stellarBodies.PlanarEntrance;
 
 public class ShipyardFleet extends Fleet {
 

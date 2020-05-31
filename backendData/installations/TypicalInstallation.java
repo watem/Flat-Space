@@ -1,6 +1,6 @@
-package FlatSpace.backendData.installations;
+package flatSpace.backendData.installations;
 
-import FlatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.mechanics.ResourceSet;
 
 public class TypicalInstallation {
   private int buildCost;

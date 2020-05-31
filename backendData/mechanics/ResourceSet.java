@@ -1,4 +1,4 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 public class ResourceSet implements Cloneable {
   public static final int numResources = 8;

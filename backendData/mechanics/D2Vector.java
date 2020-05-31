@@ -1,4 +1,4 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 public interface D2Vector extends Vector {
   public Number x();

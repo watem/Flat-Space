@@ -1,6 +1,6 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
-import FlatSpace.backendData.mechanics.Location;
+import flatSpace.backendData.mechanics.Location;
 
 public class SystemLocation extends Location {
   StellarSystem currentSystem;

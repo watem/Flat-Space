@@ -1,4 +1,4 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 public class Vector2i implements D2Vector {
   private int x, y;

@@ -1,6 +1,6 @@
-package FlatSpace.backendData.planarSpace;
+package flatSpace.backendData.planarSpace;
 
-import FlatSpace.backendData.mechanics.Location;
+import flatSpace.backendData.mechanics.Location;
 
 public class PlanarLocation extends Location {
   public int getDistance(PlanarLocation location) {

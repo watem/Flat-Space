@@ -1,4 +1,4 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
 import java.util.HashMap;
 import java.util.LinkedList;

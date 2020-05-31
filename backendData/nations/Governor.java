@@ -1,4 +1,4 @@
-package FlatSpace.backendData.nations;
+package flatSpace.backendData.nations;
 
 public class Governor {
   private double mineRate;

@@ -1,6 +1,6 @@
-package FlatSpace.backendData.shipParts;
+package flatSpace.backendData.shipParts;
 
-import FlatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.mechanics.ResourceSet;
 
 public class Part {
   private Shape shape;

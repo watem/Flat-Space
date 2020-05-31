@@ -1,4 +1,4 @@
-package FlatSpace.temporaryFrontend;
+package flatSpace.temporaryFrontend;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,10 +12,10 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import FlatSpace.Controller.SpatialController;
-import FlatSpace.Controller.TO.Coordinates;
-import FlatSpace.Controller.TO.TOBody;
-import FlatSpace.Controller.TO.TOSystem;
+import flatSpace.Controller.SpatialController;
+import flatSpace.Controller.TO.Coordinates;
+import flatSpace.Controller.TO.TOBody;
+import flatSpace.Controller.TO.TOSystem;
 
 public class SystemMap extends JPanel {
 
@@ -28,11 +28,13 @@ public class SystemMap extends JPanel {
 	private TOBody focusedBody;
 	private Coordinates focusedCoords = new Coordinates(0,0);
 //	private TOFleet focusedFleet;
+	private Coordinates currentCoords = focusedCoords;
 	
 	private List<Ellipse2D.Double> drawnBodies;
 	
-	private double zoomLevel = 3;
-	private int minShownSize = 5;
+	private double zoomLevel = 1;
+//	private int minShownSize = 5;
+	private int baseSize = 8;
 	
 	
 	
@@ -64,11 +66,11 @@ public class SystemMap extends JPanel {
 	    		
 	    	}
 	    	g2d.setColor(c);
-	    	double d = 2*zoomScale(body.getRadius());
+	    	double r = baseSize/(body.getDepth()+1);
 	    	Coordinates co = bodyLocations.get(body);
 	    	Pixels pos = toPixel(bodyLocations.get(body));
-	    	if (pos.x+d/2>0 && pos.y+d/2>0 && pos.x-d/2<this.getWidth() && pos.y-d/2<this.getHeight()) {
-	    		g2d.fill(new Ellipse2D.Double(pos.x-d/2, pos.y-d/2, d, d));
+	    	if (pos.x+r>0 && pos.y+r>0 && pos.x-r<this.getWidth() && pos.y-r<this.getHeight()) {
+	    		g2d.fill(new Ellipse2D.Double(pos.x-r, pos.y-r, 2*r, 2*r));
 	    	}
 	    }
 	    
@@ -94,18 +96,19 @@ public class SystemMap extends JPanel {
 	
 	public Pixels toPixel(Coordinates coords) {
 		Dimension mapSize = this.getSize();
-		Coordinates centreCoords;
+//		Coordinates currentCoords;
 		if (focus.equals("coords")) {
-			centreCoords = focusedCoords;
+			currentCoords = focusedCoords;
 		} else if (focus.equals("body")) {
-			centreCoords = bodyLocations.get(focusedBody);
+			currentCoords = bodyLocations.get(focusedBody);
 		} else if (focus.equals("fleet")) {
-//			focusCoords = fleetLocations.get(FocusedFleet);
+//			currentCoords = fleetLocations.get(FocusedFleet);
+			
 			throw new RuntimeException("not (yet) a valid focus point");
 		} else {
 			throw new RuntimeException("not a valid focus point");
 		}
-		int distanceFromFocusX =(int) (zoomScale(coords.getX()-centreCoords.getX())), distanceFromFocusY =(int) -(zoomScale(coords.getY()-centreCoords.getY()));
+		int distanceFromFocusX =(int) (zoomScale(coords.getX()-currentCoords.getX())), distanceFromFocusY =(int) -(zoomScale(coords.getY()-currentCoords.getY()));
 		Pixels focusLocation = new Pixels(mapSize.width/2, mapSize.height/2);
 		Pixels targetLocation = new Pixels(focusLocation.x+distanceFromFocusX,(focusLocation.y+distanceFromFocusY));
 		return targetLocation;
@@ -142,5 +145,37 @@ public class SystemMap extends JPanel {
 		this.system = system;
 		this.bodies = SpatialController.getAllBodies(system.getId());
 		refresh();
+	}
+
+	public String getFocus() {
+		return focus;
+	}
+
+	public void setFocus(String focus) {
+		this.focus = focus;
+	}
+
+	public TOBody getFocusedBody() {
+		return focusedBody;
+	}
+
+	public void setFocusedBody(TOBody focusedBody) {
+		this.focusedBody = focusedBody;
+	}
+
+	public Coordinates getFocusedCoords() {
+		return focusedCoords;
+	}
+
+	public void setFocusedCoords(Coordinates focusedCoords) {
+		this.focusedCoords = focusedCoords;
+	}
+
+	public Coordinates getCurrentCoords() {
+		return currentCoords;
+	}
+
+	public void setCurrentCoords(Coordinates currentCoords) {
+		this.currentCoords = currentCoords;
 	}
 }

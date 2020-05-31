@@ -1,8 +1,8 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 import java.util.Set;
 
-import FlatSpace.backendData.nations.Colony;
+import flatSpace.backendData.nations.Colony;
 
 public abstract class Task {
   private static Set<Task> allTasks;

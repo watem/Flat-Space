@@ -1,4 +1,4 @@
-package FlatSpace.backendData.nations;
+package flatSpace.backendData.nations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,8 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import FlatSpace.backendData.nations.technologies.Technology;
-import FlatSpace.backendData.nations.technologies.Unlockable;
+import flatSpace.backendData.nations.technologies.Technology;
 
 public class Nation {
   List<Technology> discoveredTechs;

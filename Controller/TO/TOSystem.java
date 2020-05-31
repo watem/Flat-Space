@@ -1,6 +1,6 @@
-package FlatSpace.Controller.TO;
+package flatSpace.Controller.TO;
 
-import FlatSpace.backendData.stellarBodies.StellarSystem;
+import flatSpace.backendData.stellarBodies.StellarSystem;
 
 public class TOSystem {
 	private String name;

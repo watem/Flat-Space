@@ -1,6 +1,6 @@
-package FlatSpace.backendData.shipParts.designedComponents;
+package flatSpace.backendData.shipParts.designedComponents;
 
-import FlatSpace.backendData.shipParts.DesignedPart;
+import flatSpace.backendData.shipParts.DesignedPart;
 
 public class AmmoMagazine extends DesignedPart {
 

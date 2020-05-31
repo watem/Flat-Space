@@ -1,4 +1,4 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 public class Availability {
   private int[] availability; //from 0 to 100 representing 0 to 1.0

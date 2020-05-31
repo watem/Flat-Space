@@ -1,16 +1,18 @@
-package FlatSpace.Controller;
+package flatSpace.Controller;
 
-import FlatSpace.application.FlatSpaceApplication;
-import FlatSpace.backendData.game.FlatSpace;
+import flatSpace.application.FlatSpaceApplication;
+import flatSpace.backendData.game.Profile;
+import flatSpace.temporaryFrontend.SystemView;
 
 public class TimeController implements Runnable {
 
-	static int speed = 0;
+	private static int speed = 1;
+	private static boolean paused = true;
 	
 	private static final int wait = 100;
 	public static final int secondsPerDay = 86400;
 	public static double timePerTick() {
-		return secondsPerDay/FlatSpace.getCurrentGame().getGameSettings().getTicksPerDay();
+		return secondsPerDay/Profile.getCurrentProfile().getFlatSpace().getCurrentGame().getGameSettings().getTicksPerDay();
 	}
 	
 
@@ -18,18 +20,10 @@ public class TimeController implements Runnable {
 		
 	}
 	public static void setSpeed(int i) {
-		boolean spawnThread = false;
-		if (speed<1 && i>=1) {
-//			
-			spawnThread = true;
+		if(i<1) {
+			i=1;
 		}
-//		System.out.println("speed change");
 		speed = i;
-		if (spawnThread) {
-			new Thread(new TimeController()).start();
-//			new TimeController().run();
-		}
-
 	}
 	
 	
@@ -38,29 +32,86 @@ public class TimeController implements Runnable {
 	public void run() {
 		int viewCounter = 0;
 		int industryCounter = 0;
-		while(speed>0) {
+		while(!paused) {
+			
+			SpatialController.update();
+			//FleetController.update();
+			
+			
+			
+			++viewCounter;
+			if (viewCounter>Math.pow(10, speed)) {
+				updateViews();
+				viewCounter=0;
+			}
+			++industryCounter;
+			if (industryCounter>Profile.getCurrentProfile().getFlatSpace().getCurrentGame().getGameSettings().getIndustryLength()) {
+//				IndustryController.update();
+				industryCounter = 0;
+			}
+			
+			
+			
 			try {
 				Thread.sleep((long) (wait/Math.pow(10, speed)));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-//			System.out.println("loop");
-			SpatialController.update();
-			++viewCounter;
-			if (viewCounter>Math.pow(10, speed)) {
-//				System.out.println("view");
-				FlatSpaceApplication.getSystemView().refresh();
-				viewCounter=0;
-			}
-			++industryCounter;
-			if (industryCounter>FlatSpace.getCurrentGame().getGameSettings().getIndustryLength()) {
-				
-			}
+		}
+		
+	}
+	
+	
+	private void updateViews() {
+		if (FlatSpaceApplication.getGameView()==null) {
+			return;
+		}
+		for(SystemView v:FlatSpaceApplication.getGameView().getSystemViews()) {
+			v.refresh();
+		}
+		if (FlatSpaceApplication.getGameView().getFlatView() != null) {
+			FlatSpaceApplication.getGameView().getFlatView().refresh();
 		}
 		
 	}
 
+
+	public static int getSpeed() {
+		if (speed<0) {
+			speed = 0;
+		}
+		return speed;
+	}
+
+
+	public static int getSecondsperday() {
+		return secondsPerDay;
+	}
+
+	public static void pause() {
+		paused = true;
+	}
+
+	public static void unpause() {
+		if (paused) {
+			new Thread(new TimeController()).start();
+		}
+		paused = false;
+	}
 	
+	public static boolean isPaused() {
+		return paused;
+	}
+	
+	public static boolean togglePause() {
+		if(paused) {
+			unpause();
+		} else {
+			pause();
+		}
+		
+		return paused;
+	}
 	
 	
 }

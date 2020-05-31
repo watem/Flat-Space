@@ -1,4 +1,4 @@
-package FlatSpace.backendData.game;
+package flatSpace.backendData.game;
 
 public class OutOfNamesException extends RuntimeException {
 

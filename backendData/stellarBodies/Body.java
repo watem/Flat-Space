@@ -1,11 +1,12 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import FlatSpace.backendData.mechanics.Availability;
-import FlatSpace.backendData.mechanics.ResourceSet;
-import FlatSpace.backendData.nations.Colony;
+import flatSpace.backendData.mechanics.Availability;
+import flatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.nations.Colony;
 
 public abstract class Body {
   private Colony colony;
@@ -19,10 +20,10 @@ public abstract class Body {
   private Availability resourceAvail;
   private List<Body> satellites;
   private Body parentBody;
-  private int depth;
+  private int depth=0;
   private RotationalVectors vectors;
   private List<PlanetaryRing> rings;
-
+  private Color color;
 
   public Body(String aName, double aMass, double aRadius, ResourceSet aResources, Availability avail, StellarSystem sys) {
     this(aName, aMass, aRadius, sys);
@@ -103,6 +104,7 @@ public Body setParentBody(Body parentBody) {
 	}
 	this.parentBody = parentBody;
 	parentBody.getSatellites().add(this);
+	depth = parentBody.getDepth()+1;
 	return this;
 }
 
@@ -115,6 +117,12 @@ public void setResources(ResourceSet resources) {
 public void setRadius(double radius) {
 	this.radius = radius;
 	
+}
+public Color getColor() {
+	return color;
+}
+public void setColor(Color color) {
+	this.color = color;
 }
 
 }

@@ -1,6 +1,6 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
-import FlatSpace.Controller.TO.Coordinates;
+import flatSpace.Controller.TO.Coordinates;
 
 public class RotationalVectors {
   private double theta, omega, r;

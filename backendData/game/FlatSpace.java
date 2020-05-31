@@ -1,23 +1,28 @@
-package FlatSpace.backendData.game;
+package flatSpace.backendData.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FlatSpace {
 	List<FlatSpaceGame> games;
-	static FlatSpaceGame currentGame;
-	private int nextId = 0;
+	FlatSpaceGame currentGame;
+	private int nextGameId = 0;
+	Profile user;
+	public static final String[] startingSys = {"Sol", "Proxima Centauri", "RAND"};
 	
+	public FlatSpace(Profile user) {
+		this.user = user;
+	}
 	
 	public FlatSpaceGame newGame(String name) {
-		FlatSpaceGame newGame = new FlatSpaceGame(name, nextId);
-		++nextId;
+		FlatSpaceGame newGame = new FlatSpaceGame(name, nextGameId);
+		++nextGameId;
 		getGames().add(newGame);
 		return newGame;
 	}
 
 
-	public static void setCurrentGame(FlatSpaceGame game) {
+	public void setCurrentGame(FlatSpaceGame game) {
 		currentGame = game;
 	}
 
@@ -30,7 +35,7 @@ public class FlatSpace {
 	}
 
 
-	public static FlatSpaceGame getCurrentGame() {
+	public FlatSpaceGame getCurrentGame() {
 		return currentGame;
 	}
 	

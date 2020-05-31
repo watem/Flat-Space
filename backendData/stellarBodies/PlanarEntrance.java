@@ -1,6 +1,7 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
-import FlatSpace.backendData.planarSpace.PlanarLocation;
+import flatSpace.backendData.planarSpace.PlanarLocation;
+import flatSpace.backendData.planarSpace.PlanarSidePortal;
 
 public class PlanarEntrance extends Body {
 	
@@ -9,13 +10,13 @@ public class PlanarEntrance extends Body {
 		
 	}
 
-private PlanarLocation planarSideEntrance;
+private PlanarSidePortal planarSideEntrance;
 
-public PlanarLocation getPlanarSideEntrance() {
+public PlanarSidePortal getPlanarSideEntrance() {
 	return planarSideEntrance;
 }
 
-public void setPlanarSideEntrance(PlanarLocation planarSideEntrance) {
+public void setPlanarSideEntrance(PlanarSidePortal planarSideEntrance) {
 	this.planarSideEntrance = planarSideEntrance;
 }
 }

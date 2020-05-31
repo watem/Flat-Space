@@ -1,6 +1,6 @@
-package FlatSpace.backendData.shipParts.coreComponents;
+package flatSpace.backendData.shipParts.coreComponents;
 
-import FlatSpace.backendData.shipParts.Part;
+import flatSpace.backendData.shipParts.Part;
 
 public class GasHarvester extends Part {
 

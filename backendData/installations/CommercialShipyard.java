@@ -1,6 +1,6 @@
-package FlatSpace.backendData.installations;
+package flatSpace.backendData.installations;
 
-import FlatSpace.backendData.nations.Colony;
+import flatSpace.backendData.nations.Colony;
 
 public class CommercialShipyard extends Shipyard {
 

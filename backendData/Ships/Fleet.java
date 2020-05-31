@@ -1,13 +1,13 @@
-package FlatSpace.backendData.Ships;
+package flatSpace.backendData.Ships;
 
 import java.util.List;
 
-import FlatSpace.backendData.mechanics.Location;
-import FlatSpace.backendData.mechanics.Velocity;
-import FlatSpace.backendData.planarSpace.PlanarLocation;
-import FlatSpace.backendData.stellarBodies.Body;
-import FlatSpace.backendData.stellarBodies.PlanarEntrance;
-import FlatSpace.backendData.stellarBodies.SystemLocation;
+import flatSpace.backendData.mechanics.Location;
+import flatSpace.backendData.mechanics.Velocity;
+import flatSpace.backendData.planarSpace.PlanarLocation;
+import flatSpace.backendData.stellarBodies.Body;
+import flatSpace.backendData.stellarBodies.PlanarEntrance;
+import flatSpace.backendData.stellarBodies.SystemLocation;
 
 public class Fleet {
   Location currentLocation;
@@ -72,7 +72,7 @@ public class Fleet {
         int minDistance = -1;
         for (PlanarEntrance e1: ((SystemLocation)currentLocation).getCurrentSystem().getPlanarEntrances()) {
           for (PlanarEntrance e2: target.getSystem().getPlanarEntrances()) {
-            int dis = e1.getPlanarSideEntrance().getDistance(e2.getPlanarSideEntrance());
+            int dis = e1.getPlanarSideEntrance().getLocation().getDistance(e2.getPlanarSideEntrance().getLocation());
             if (minDistance == -1) {
               minDistance = dis;
               closestE1 = e1;

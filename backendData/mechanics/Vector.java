@@ -1,4 +1,4 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 public interface Vector {
   public static Vector add(Vector a, Vector b) {

@@ -1,13 +1,13 @@
-package FlatSpace.backendData.nations;
+package flatSpace.backendData.nations;
 
 import java.util.List;
 
-import FlatSpace.backendData.Ships.ShipyardFleet;
-import FlatSpace.backendData.Ships.SpecificPart;
-import FlatSpace.backendData.installations.CommercialShipyard;
-import FlatSpace.backendData.installations.NavalShipyard;
-import FlatSpace.backendData.mechanics.ResourceSet;
-import FlatSpace.backendData.stellarBodies.Body;
+import flatSpace.backendData.Ships.ShipyardFleet;
+import flatSpace.backendData.Ships.SpecificPart;
+import flatSpace.backendData.installations.CommercialShipyard;
+import flatSpace.backendData.installations.NavalShipyard;
+import flatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.stellarBodies.Body;
 
 public class Colony {
   private Body body;

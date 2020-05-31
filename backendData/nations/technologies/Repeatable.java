@@ -1,6 +1,6 @@
-package FlatSpace.backendData.nations.technologies;
+package flatSpace.backendData.nations.technologies;
 
-import FlatSpace.backendData.nations.Nation;
+import flatSpace.backendData.nations.Nation;
 
 public class Repeatable extends Technology{
   private int amount;

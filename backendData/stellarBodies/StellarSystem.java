@@ -1,4 +1,4 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -61,7 +61,7 @@ public List<Planetoid> getMajorBodies() {
 	return majorBodies;
 }
 public List<Planetoid> getMinorBodies() {
-	if (majorBodies == null) {
+	if (minorBodies == null) {
 		minorBodies = new ArrayList<>();
 	}
 	return minorBodies;

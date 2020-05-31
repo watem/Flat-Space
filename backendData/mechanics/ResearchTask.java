@@ -1,7 +1,7 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
-import FlatSpace.backendData.nations.Colony;
-import FlatSpace.backendData.nations.technologies.Technology;
+import flatSpace.backendData.nations.Colony;
+import flatSpace.backendData.nations.technologies.Technology;
 
 public class ResearchTask extends Task {
   Technology tech;

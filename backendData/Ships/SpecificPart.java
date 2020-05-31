@@ -1,7 +1,7 @@
-package FlatSpace.backendData.Ships;
+package flatSpace.backendData.Ships;
 
-import FlatSpace.backendData.nations.Colony;
-import FlatSpace.backendData.shipParts.Part;
+import flatSpace.backendData.nations.Colony;
+import flatSpace.backendData.shipParts.Part;
 
 public class SpecificPart {
   Part design;

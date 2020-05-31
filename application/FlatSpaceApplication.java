@@ -1,27 +1,35 @@
-package FlatSpace.application;
+package flatSpace.application;
 
-import FlatSpace.temporaryFrontend.SystemView;
+import flatSpace.temporaryFrontend.GameMenuView;
+import flatSpace.temporaryFrontend.StartMenu;
 
+/**
+ * 
+ * @author Matthew
+ *
+ */
 public class FlatSpaceApplication {
-	static SystemView systemView;
-	
+	static GameMenuView gameView;
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		java.awt.EventQueue.invokeLater(new Runnable() {
 	        public void run() {
-	          systemView = new SystemView();
-	          systemView.setVisible(true);
+	          new StartMenu().setVisible(true);
 	        }
 	    });
 
 	}
 
-	public static SystemView getSystemView() {
-		return systemView;
+	public static GameMenuView getGameView() {
+		return gameView;
 	}
 
-	public static void setSystemView(SystemView aSystemView) {
-		systemView = aSystemView;
+	public static void setGameMenuView(GameMenuView aGameView) {
+		gameView = aGameView;
 	}
 
 	

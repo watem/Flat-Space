@@ -1,4 +1,4 @@
-package FlatSpace.backendData.shipParts;
+package flatSpace.backendData.shipParts;
 
 public class Shape {
   private int x;

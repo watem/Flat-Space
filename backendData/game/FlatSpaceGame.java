@@ -1,11 +1,12 @@
-package FlatSpace.backendData.game;
+package flatSpace.backendData.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import FlatSpace.backendData.game.OutOfNamesException;
-import FlatSpace.backendData.nations.Nation;
-import FlatSpace.backendData.stellarBodies.StellarSystem;
+import flatSpace.backendData.nations.Nation;
+import flatSpace.backendData.nations.NationSettings;
+import flatSpace.backendData.planarSpace.PlanarSpace;
+import flatSpace.backendData.stellarBodies.StellarSystem;
 
 public class FlatSpaceGame {
 	private String gameName;
@@ -13,8 +14,10 @@ public class FlatSpaceGame {
 	private List<StellarSystem> systems;
 	private List<Nation> nations;
 	private NameLists names;
-	private GameSettings gameSetting = new GameSettings();
-	private int nextSystemId = 0;
+	private GameSettings gameSettings;
+	private NationSettings playerNation;
+	private SystemFactory factory = new SystemFactory(this);
+	private PlanarSpace planeSpace;
 	
 	public List<StellarSystem> getSystems() {
 		if (systems == null) {
@@ -23,9 +26,13 @@ public class FlatSpaceGame {
 		return systems;
 	}
 	public FlatSpaceGame(String name, int id) {
+		this(name, id, new GameSettings());
+	}
+	public FlatSpaceGame(String name, int id, GameSettings gameSettings) {
 		gameName = name;
 		this.id = id;
 		names = new NameLists();
+		this.gameSettings = gameSettings;
 	}
 	public List<Nation> getNations() {
 		if (nations == null) {
@@ -33,28 +40,27 @@ public class FlatSpaceGame {
 		}
 		return nations;
 	}
-	
-	
-	public StellarSystem createEmptySystem() throws OutOfNamesException {
-		List<String> nameList = names.getSystemNames();
-		if (nameList.size()<1) {
-			throw new OutOfNamesException("no names left to select from");
+	public void generate() {
+		String sysName = playerNation.getHomeSys();
+		if (sysName.equals("RAND")) {
+			factory.create();
+		} else {
+			factory.create(sysName);
 		}
-		int index =(int)Math.floor(Math.random()*nameList.size());
-		String name = nameList.get(index);
-		nameList.remove(index);
-		StellarSystem system = new StellarSystem(name);
-		system.setId(nextSystemId);
-		++nextSystemId;
-		getSystems().add(system);
-		return system;
+		for(int i = 0;i<gameSettings.getStartingNPEs();++i) {
+			createSystem();
+		}
+		
 	}
+	
+	
 	public StellarSystem createSystem() throws OutOfNamesException {
-		StellarSystem system = createEmptySystem();
-		
-		
-		return system;
+		return factory.create();
 	}
+	public StellarSystem createSystem(String name) {		
+		return factory.create(name);
+	}
+	
 	public String getGameName() {
 		return gameName;
 	}
@@ -65,6 +71,21 @@ public class FlatSpaceGame {
 		return names;
 	}
 	public GameSettings getGameSettings() {
-		return gameSetting;
+		return gameSettings;
+	}
+	public void setGameSettings(GameSettings gameSettings) {
+		this.gameSettings = gameSettings;
+	}
+	public NationSettings getPlayerNation() {
+		return playerNation;
+	}
+	public void setPlayerNation(NationSettings playerNation) {
+		this.playerNation = playerNation;
+	}
+	public PlanarSpace getPlaneSpace() {
+		return planeSpace;
+	}
+	public void setPlaneSpace(PlanarSpace planeSpace) {
+		this.planeSpace = planeSpace;
 	}
 }

@@ -1,9 +1,9 @@
-package FlatSpace.Controller.TO;
+package flatSpace.Controller.TO;
 
 import java.awt.Color;
 import java.util.Random;
 
-import FlatSpace.backendData.stellarBodies.Body;
+import flatSpace.backendData.stellarBodies.Body;
 
 public class TOBody {
   private TOSystem system;
@@ -12,14 +12,20 @@ public class TOBody {
   private double mass;
   private double radius;
   private Color c;
+  private int depth;
 
   public TOBody() {}
   public TOBody(Body b) {
+	if (b==null) {
+		return;  
+	}
     system = new TOSystem(b.getSystem());
     name = b.getName();
     mass = b.getMass();
     radius = b.getRadius();
     id = b.getId();
+    c = b.getColor();
+    depth = b.getDepth();
   }
 public TOSystem getSystem() {
 	return system;
@@ -72,6 +78,13 @@ public boolean equals(Object obj) {
 		return false;
 	}
 	return true;
+}
+public int getDepth() {
+	return depth;
+}
+@Override
+public String toString() {
+	return name;
 }
 
   

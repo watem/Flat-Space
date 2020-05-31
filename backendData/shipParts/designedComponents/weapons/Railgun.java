@@ -1,6 +1,6 @@
-package FlatSpace.backendData.shipParts.designedComponents.weapons;
+package flatSpace.backendData.shipParts.designedComponents.weapons;
 
-import FlatSpace.backendData.shipParts.DesignedPart;
+import flatSpace.backendData.shipParts.DesignedPart;
 
 public class Railgun extends DesignedPart {
 

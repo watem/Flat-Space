@@ -1,10 +1,10 @@
-package FlatSpace.backendData.nations.technologies;
+package flatSpace.backendData.nations.technologies;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import FlatSpace.backendData.nations.Nation;
+import flatSpace.backendData.nations.Nation;
 
 public class Unlockable extends Technology {
   private static List<Unlockable> allUnlockables;

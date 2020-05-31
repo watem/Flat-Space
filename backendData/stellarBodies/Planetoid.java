@@ -1,6 +1,4 @@
-package FlatSpace.backendData.stellarBodies;
-
-import java.util.List;
+package flatSpace.backendData.stellarBodies;
 
 public class Planetoid extends Body {
   public Planetoid(String aName, double aMass, double aRadius, StellarSystem sys) {

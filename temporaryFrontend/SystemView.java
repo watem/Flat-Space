@@ -1,76 +1,80 @@
-package FlatSpace.temporaryFrontend;
+package flatSpace.temporaryFrontend;
 
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import FlatSpace.Controller.GameController;
-import FlatSpace.Controller.SpatialController;
-import FlatSpace.Controller.TimeController;
-import FlatSpace.Controller.TO.TOSystem;
+import flatSpace.Controller.GameController;
+import flatSpace.Controller.SpatialController;
+import flatSpace.Controller.TimeController;
+import flatSpace.Controller.TO.Coordinates;
+import flatSpace.Controller.TO.TOBody;
+import flatSpace.Controller.TO.TOSystem;
 
 
-
-public class SystemView extends JFrame{
-	private JButton pauseButton = new JButton("||");
-	private JButton play1Button = new JButton(">");
-	private JButton play2Button = new JButton(">>");
-	private JButton play3Button = new JButton(">>>");
+public class SystemView extends JDialog {
 	private JButton zoomInButton = new JButton("+");
 	private JButton zoomOutButton = new JButton("-");
-	private double zoomLevel = 3;
+	private JButton moveUp = new JButton("^");
+	private JButton moveDown = new JButton("v");
+	private JButton moveLeft = new JButton("<");
+	private JButton moveRight = new JButton(">");
+	private double baseMoveDis = 20;
+
+	private double zoomLevel = 3E-6;
 	private JLabel zoomLevelLabel = new JLabel(Double.toString(zoomLevel));
 	private JComboBox<TOSystem> systemSelection = new JComboBox<>();
+	private JComboBox<TOBody> bodySelection = new JComboBox<>();
+	private TOSystem selectedSystem;
 	private SystemMap systemMap;
 //	private int speed = 0;
-	
+	private GameMenuView gmv;
+	TimeControlPanel tcp;
+
 	public void update() {
 		systemSelection.removeAllItems();
-		for(TOSystem name:GameController.getSystems()) {
+		for (TOSystem name : GameController.getSystems()) {
 			systemSelection.addItem(name);
 		}
-		TOSystem system = systemSelection.getItemAt(systemSelection.getSelectedIndex());
+		selectedSystem = systemSelection.getItemAt(systemSelection.getSelectedIndex());
+
+		setTitle("Flat-Space - " + selectedSystem);
+
+		systemMap = new SystemMap(selectedSystem, SpatialController.getAllBodies(selectedSystem.getId()));
+		systemMap.setZoomLevel(zoomLevel);
+
+		updateSystem();
 		
-		setTitle("Flat-Space - "+system);
-		
-		
-		systemMap = new SystemMap(system, SpatialController.getAllBodies(system.getId()));
-		
-		pauseButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				TimeController.setSpeed(0);
-			}
-		});
-		play1Button.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				TimeController.setSpeed(1);
-			}
-		});
-		play2Button.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				TimeController.setSpeed(2);
-			}
-		});
-		play3Button.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				TimeController.setSpeed(3);
-			}
-		});
+		tcp = new TimeControlPanel(this);
+
+		setupLayout();
+	}
+
+	public SystemView(GameMenuView owner) throws HeadlessException {
+		super(owner, false);
+		gmv = owner;
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		setTitle("Flat-Space");
+		update();
+		listeners();
+		refresh();
+	}
+
+	private void listeners() {
 		zoomInButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				zoomLevel*=2;
+				zoomLevel *= 2;
 				zoomLevelLabel.setText(Double.toString(zoomLevel));
 				systemMap.setZoomLevel(zoomLevel);
 			}
@@ -78,7 +82,7 @@ public class SystemView extends JFrame{
 		zoomOutButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				zoomLevel/=2;
+				zoomLevel /= 2;
 				zoomLevelLabel.setText(Double.toString(zoomLevel));
 				systemMap.setZoomLevel(zoomLevel);
 			}
@@ -86,71 +90,140 @@ public class SystemView extends JFrame{
 		systemSelection.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				System.out.println("selecetion");
 				TOSystem system = systemSelection.getItemAt(systemSelection.getSelectedIndex());
-				setTitle("Flat-Space - "+system);
+				selectedSystem = system;
+				setTitle("Flat-Space - " + system);
 				systemMap.setSystem(system);
+				updateSystem();
 			}
 		});
-		
+		moveUp.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				Coordinates cur = systemMap.getCurrentCoords();
+				Coordinates next = new Coordinates(cur.getX(), cur.getY() + baseMoveDis * inverseZoom());
+				systemMap.setFocusedCoords(next);
+				systemMap.setFocus("coords");
+			}
+		});
+		moveDown.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				Coordinates cur = systemMap.getCurrentCoords();
+				Coordinates next = new Coordinates(cur.getX(), cur.getY() - baseMoveDis * inverseZoom());
+				systemMap.setFocusedCoords(next);
+				systemMap.setFocus("coords");
+			}
+		});
+		moveLeft.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				Coordinates cur = systemMap.getCurrentCoords();
+				Coordinates next = new Coordinates(cur.getX() - baseMoveDis * inverseZoom(), cur.getY());
+				systemMap.setFocusedCoords(next);
+				systemMap.setFocus("coords");
+			}
+		});
+		moveRight.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				Coordinates cur = systemMap.getCurrentCoords();
+				Coordinates next = new Coordinates(cur.getX() + baseMoveDis * inverseZoom(), cur.getY());
+				systemMap.setFocusedCoords(next);
+				systemMap.setFocus("coords");
+			}
+		});
+		bodySelection.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				TOBody body = bodySelection.getItemAt(bodySelection.getSelectedIndex());
+				systemMap.setFocusedBody(body);
+				systemMap.setFocus("body");
+				refresh();
+			}
+		});
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent we) {
+				removeThis();
+			}
+		});
+	}
+	
+	private void setupLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
-		
+
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-					.addComponent(systemSelection)
-					.addComponent(pauseButton)
-					.addComponent(play1Button)
-					.addComponent(play2Button)
-					.addComponent(play3Button)
+						.addComponent(systemSelection)
+						.addComponent(bodySelection)
+						.addComponent(tcp)
 				)
 				.addGroup(layout.createSequentialGroup()
+						.addComponent(moveLeft)
 						.addGroup(layout.createParallelGroup()
 								.addComponent(zoomInButton)
 								.addComponent(zoomLevelLabel)
 								.addComponent(zoomOutButton)
+								.addComponent(moveUp)
+								.addComponent(moveDown)
 						)
+						.addComponent(moveRight)
 						.addComponent(systemMap)
 				)
 		);
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup()
 						.addComponent(systemSelection)
-						.addComponent(pauseButton)
-						.addComponent(play1Button)
-						.addComponent(play2Button)
-						.addComponent(play3Button)
+						.addComponent(bodySelection)
+						.addComponent(tcp)
 				)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(layout.createSequentialGroup()
+								.addComponent(moveUp)
+								.addGroup(layout.createParallelGroup()
+										.addComponent(moveLeft)
+										.addComponent(moveRight)
+								)
+								.addComponent(moveDown)
 								.addComponent(zoomInButton)
 								.addComponent(zoomLevelLabel)
 								.addComponent(zoomOutButton)
 						)
 						.addComponent(systemMap)
 				)
-				
 		);
-		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {pauseButton, systemSelection});
+		layout.linkSize(SwingConstants.VERTICAL,
+				new java.awt.Component[] { tcp,systemSelection, bodySelection });
 		systemMap.setMinimumSize(new Dimension(200, 200));
 		pack();
-		this.setMinimumSize(getSize());
-	}
-	
-	public SystemView() throws HeadlessException {
-		super();
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setTitle("Flat-Space");
-		update();
-		refresh();
+		tcp.setMaximumSize(tcp.getSize());
+		tcp.setMinimumSize(tcp.getSize());
+		Dimension newSize = new Dimension(getSize().width*2, getSize().height*2);
+		this.setSize(newSize);
 	}
 
 	public void refresh() {
 		systemMap.refresh();
 	}
-	
-	
-	
+
+	private void removeThis() {
+		gmv.getSystemViews().remove(this);
+		dispose();
+	}
+
+	private double inverseZoom() {
+		return 1 / zoomLevel;
+	}
+
+	private void updateSystem() {
+		bodySelection.removeAllItems();
+		for (TOBody b : SpatialController.getAllBodies(selectedSystem.getId())) {
+			bodySelection.addItem(b);
+		}
+		systemMap.setFocus("coords");
+	}
+
 }

@@ -1,6 +1,6 @@
-package FlatSpace.backendData.stellarBodies;
+package flatSpace.backendData.stellarBodies;
 
-import FlatSpace.backendData.mechanics.Constants;
+import flatSpace.backendData.mechanics.Constants;
 
 public class Blackhole extends Body{
 

@@ -1,11 +1,11 @@
-package FlatSpace.backendData.installations;
+package flatSpace.backendData.installations;
 
-import FlatSpace.backendData.mechanics.Constants;
-import FlatSpace.backendData.mechanics.IntContainer;
-import FlatSpace.backendData.mechanics.ResourceSet;
-import FlatSpace.backendData.mechanics.ShipyardTask;
-import FlatSpace.backendData.nations.Colony;
-import FlatSpace.backendData.shipDesign.ShipDesign;
+import flatSpace.backendData.mechanics.Constants;
+import flatSpace.backendData.mechanics.IntContainer;
+import flatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.mechanics.ShipyardTask;
+import flatSpace.backendData.nations.Colony;
+import flatSpace.backendData.shipDesign.ShipDesign;
 
 public abstract class Shipyard {
   Colony home;

@@ -1,9 +1,9 @@
-package FlatSpace.backendData.Ships;
+package flatSpace.backendData.Ships;
 
 import java.util.List;
 
-import FlatSpace.backendData.installations.Shipyard;
-import FlatSpace.backendData.shipDesign.ShipDesign;
+import flatSpace.backendData.installations.Shipyard;
+import flatSpace.backendData.shipDesign.ShipDesign;
 
 public class Ship implements Cloneable{
   List<SpecificPart> parts;

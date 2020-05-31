@@ -1,4 +1,4 @@
-package FlatSpace.backendData.mechanics;
+package flatSpace.backendData.mechanics;
 
 public class Constants {
   public static final double G = 6.674*Math.pow(10, -20); //  km^3/kg/s^2

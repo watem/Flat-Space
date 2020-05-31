@@ -1,4 +1,4 @@
-package FlatSpace.backendData.shipParts.coreComponents;
+package flatSpace.backendData.shipParts.coreComponents;
 
 public class OuterArmour {
   private int defense;
