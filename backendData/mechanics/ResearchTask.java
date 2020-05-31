@@ -1,3 +1,8 @@
+package flatSpace.backendData.mechanics;
+
+import flatSpace.backendData.nations.Colony;
+import flatSpace.backendData.nations.technologies.Technology;
+
 public class ResearchTask extends Task {
   Technology tech;
 
@@ -5,5 +10,5 @@ public class ResearchTask extends Task {
     super(cost, progress, colony, null);
     this.tech = tech;
   }
-  private void finish() {}
+  public void finish() {}
 }

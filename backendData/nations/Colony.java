@@ -1,7 +1,18 @@
+package flatSpace.backendData.nations;
+
+import java.util.List;
+
+import flatSpace.backendData.Ships.ShipyardFleet;
+import flatSpace.backendData.Ships.SpecificPart;
+import flatSpace.backendData.installations.CommercialShipyard;
+import flatSpace.backendData.installations.NavalShipyard;
+import flatSpace.backendData.mechanics.ResourceSet;
+import flatSpace.backendData.stellarBodies.Body;
+
 public class Colony {
   private Body body;
   private Nation owner;
-  private Governer governer;
+  private Governor governor;
 
   private int automatedMines;
   private int mines;
@@ -25,12 +36,13 @@ public class Colony {
 
   private int mineRate = updateMineRate();
 
-  public mine() {
+  public void mine() {
     ResourceSet resources = body.getResources();
     if (mineRate <= 0 || resources == null) {
       return;
     }
-    resources.mine(stockpile, mineRate, body.getAvailabilty());
+    resources.mine(stockpile, mineRate, body.getResourceAvail());
+    
     body.updateAvail();
   }
 
@@ -70,8 +82,8 @@ public class Colony {
     updateMineRate();
     return numMines;
   }
-  public void setGovernor(Governer aGovernor) {
-    this.governer = aGovernor;
+  public void setGovernor(Governor aGovernor) {
+    this.governor = aGovernor;
     updateMineRate();
   }
 
@@ -84,4 +96,140 @@ public class Colony {
       //error message
     }
   }
+
+public Nation getOwner() {
+	return owner;
+}
+
+public void setOwner(Nation owner) {
+	this.owner = owner;
+}
+
+public int getAutomatedMines() {
+	return automatedMines;
+}
+
+public void setAutomatedMines(int automatedMines) {
+	this.automatedMines = automatedMines;
+}
+
+public int getMines() {
+	return mines;
+}
+
+public void setMines(int mines) {
+	this.mines = mines;
+}
+
+public int getFactories() {
+	return factories;
+}
+
+public void setFactories(int factories) {
+	this.factories = factories;
+}
+
+public int getFighterFactories() {
+	return fighterFactories;
+}
+
+public void setFighterFactories(int fighterFactories) {
+	this.fighterFactories = fighterFactories;
+}
+
+public int getFuelRefineries() {
+	return fuelRefineries;
+}
+
+public void setFuelRefineries(int fuelRefineries) {
+	this.fuelRefineries = fuelRefineries;
+}
+
+public int getOrdinanceFactories() {
+	return ordinanceFactories;
+}
+
+public void setOrdinanceFactories(int ordinanceFactories) {
+	this.ordinanceFactories = ordinanceFactories;
+}
+
+public int getMaintanceFacilities() {
+	return maintanceFacilities;
+}
+
+public void setMaintanceFacilities(int maintanceFacilities) {
+	this.maintanceFacilities = maintanceFacilities;
+}
+
+public int getMassDrivers() {
+	return massDrivers;
+}
+
+public void setMassDrivers(int massDrivers) {
+	this.massDrivers = massDrivers;
+}
+
+public int getResearchLabs() {
+	return researchLabs;
+}
+
+public void setResearchLabs(int researchLabs) {
+	this.researchLabs = researchLabs;
+}
+
+public int getSpacePorts() {
+	return spacePorts;
+}
+
+public void setSpacePorts(int spacePorts) {
+	this.spacePorts = spacePorts;
+}
+
+public int getTerraformingInstallations() {
+	return terraformingInstallations;
+}
+
+public void setTerraformingInstallations(int terraformingInstallations) {
+	this.terraformingInstallations = terraformingInstallations;
+}
+
+public int getTrackingStations() {
+	return trackingStations;
+}
+
+public void setTrackingStations(int trackingStations) {
+	this.trackingStations = trackingStations;
+}
+
+public Body getBody() {
+	return body;
+}
+
+public Governor getGovernor() {
+	return governor;
+}
+
+public List<NavalShipyard> getNavalShipyards() {
+	return navalShipyards;
+}
+
+public List<CommercialShipyard> getCommercialShipyards() {
+	return CommercialShipyards;
+}
+
+public ShipyardFleet getShipyardFleet() {
+	return shipyardFleet;
+}
+
+public ResourceSet getStockpile() {
+	return stockpile;
+}
+
+public List<SpecificPart> getPartsStockpile() {
+	return partsStockpile;
+}
+
+public int getMineRate() {
+	return mineRate;
+}
 }

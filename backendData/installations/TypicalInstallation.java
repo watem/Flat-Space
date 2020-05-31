@@ -1,3 +1,7 @@
+package flatSpace.backendData.installations;
+
+import flatSpace.backendData.mechanics.ResourceSet;
+
 public class TypicalInstallation {
   private int buildCost;
   private ResourceSet buildResources;
@@ -5,6 +9,7 @@ public class TypicalInstallation {
 
 
   public boolean createInstallation() {
+	return false;
     
   }
 }

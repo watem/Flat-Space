@@ -1,3 +1,5 @@
+package flatSpace.backendData.mechanics;
+
 public class Vector2i implements D2Vector {
   private int x, y;
   public Vector2i(int x, int y) {
@@ -8,16 +10,16 @@ public class Vector2i implements D2Vector {
     this((int)x, (int)y);
   }
   public Vector2i(D2Vector a) {
-    this(a.x(), a.y());
+    this(a.x().intValue(), a.y().intValue());
   }
   public static Vector add(Vector a, Vector b) {
-    return new Vector2i(a.x()+b.x(), a.y()+b.y());
+    return new Vector2i(a.x().intValue()+b.x().intValue(), a.y().intValue()+b.y().intValue());
   }
   public static Vector subtract(Vector a, Vector b) {
-    return new Vector2i(a.x()-b.x(), a.y()-b.y());
+    return new Vector2i(a.x().intValue()-b.x().intValue(), a.y().intValue()-b.y().intValue());
   }
   public static Vector multiply(Vector a, double b) {
-    return new Vector2i(a.x()*b, a.y()*b);
+    return new Vector2i(a.x().intValue()*b, a.y().intValue()*b);
   }
   public Vector add(Vector a) {
     this.x+=(int)a.x();
@@ -47,4 +49,9 @@ public class Vector2i implements D2Vector {
   public Number y() {
     return this.y;
   }
+@Override
+public Vector transpose() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

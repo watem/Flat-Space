@@ -1,3 +1,6 @@
+package flatSpace.backendData.shipParts;
+
+import flatSpace.backendData.mechanics.ResourceSet;
 
 public class Part {
   private Shape shape;
@@ -18,4 +21,19 @@ public class Part {
   public Shape getShape() {
     return this.shape;
   }
+public boolean isMilitary() {
+	return military;
+}
+public void setMilitary(boolean military) {
+	this.military = military;
+}
+public boolean isObsolete() {
+	return obsolete;
+}
+public void setObsolete(boolean obsolete) {
+	this.obsolete = obsolete;
+}
+public ResourceSet getResourceCost() {
+	return resourceCost;
+}
 }

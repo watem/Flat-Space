@@ -1,3 +1,7 @@
+package flatSpace.backendData.Ships;
+
+import flatSpace.backendData.stellarBodies.PlanarEntrance;
+
 public class ShipyardFleet extends Fleet {
 
   public int getMaxSpeed() {

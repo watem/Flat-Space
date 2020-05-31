@@ -1,3 +1,8 @@
+package flatSpace.backendData.Ships;
+
+import flatSpace.backendData.nations.Colony;
+import flatSpace.backendData.shipParts.Part;
+
 public class SpecificPart {
   Part design;
   int damage;
@@ -5,7 +10,7 @@ public class SpecificPart {
   //location on a Ship
 
   public void scrap(Colony colony) {
-    colony.getStockPile().add(design.getResouceCost().multiplyAll(0.5));
+    colony.getStockpile().add(design.getResourceCost().multiplyAll(0.5));
     
     //delete part
   }

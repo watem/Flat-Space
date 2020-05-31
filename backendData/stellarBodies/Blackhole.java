@@ -1,23 +1,26 @@
+package flatSpace.backendData.stellarBodies;
+
+import flatSpace.backendData.mechanics.Constants;
+
 public class Blackhole extends Body{
 
-  public Blackhole(String name, double mass) {
-    double r = 2*mass*Constants.G/Constants.C/Constants.C;
-    super(name, mass, r);
+  public Blackhole(String name, double mass, StellarSystem sys) {
+    super(name, mass, 2*mass*Constants.G/Constants.C/Constants.C, sys);
   }
 
-  @override
+  @Override
   public void setMass(double mass) {
     super.setMass(mass);
     double r = 2*mass*Constants.G/Constants.C/Constants.C;
     super.setRadius(r);
   }
 
-  @override
+  @Override
   public double getRadius() {
     return 2*this.getMass()*Constants.G/Constants.C/Constants.C;
   }
 
-  @override
+  @Override
   public void setRadius(double radius) {
     super.setRadius(this.getRadius());
   }

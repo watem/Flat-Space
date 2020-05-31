@@ -1,4 +1,6 @@
-public class ResourceSet implements cloneable {
+package flatSpace.backendData.mechanics;
+
+public class ResourceSet implements Cloneable {
   public static final int numResources = 8;
   private int hydrogen;
   private int lithium;
@@ -9,7 +11,7 @@ public class ResourceSet implements cloneable {
   private int carbon;
   private int ice;
 
-  public ResourceSet(int h, int li, int w, int ur, int fe, int si, int c, int h2o) {
+  public ResourceSet(int h, int li, int w, int u, int fe, int si, int c, int h2o) {
     hydrogen = h;
     lithium = li;
     tungsten = w;
@@ -30,7 +32,18 @@ public class ResourceSet implements cloneable {
     ice = resources[7];
   }
 
-  public ResourceSet clone() {
+  public ResourceSet() {
+	  hydrogen = 0;
+	    lithium = 0;
+	    tungsten = 0;
+	    uranium = 0;
+	    iron = 0;
+	    silicon = 0;
+	    carbon = 0;
+	    ice = 0;
+	}
+
+public ResourceSet clone() {
     return new ResourceSet(getAll());
   }
   public boolean add(ResourceSet aSet) {
@@ -66,17 +79,17 @@ public class ResourceSet implements cloneable {
     this.setAll(resources);
     return true;
   }
-  public boolean multiplyAll(double m) {
+  public ResourceSet multiplyAll(double m) {
     int resources[] = new int[numResources];
     int all[] = this.getAll();
     for(int i = 0;i<resources.length;++i) {
       resources[i] = (int) (all[i]*m);
       if (resources[i]<0) {
-        return false;
+        return null;
       }
     }
     this.setAll(resources);
-    return true;
+    return this;
   }
 
   /**
@@ -93,7 +106,7 @@ public class ResourceSet implements cloneable {
     if (total == 0) {
       return;
     }
-    if (total<=ammount) {
+    if (total<=amount) {
       aSet.add(this);
       this.subtract(this);
       return;
@@ -110,7 +123,7 @@ public class ResourceSet implements cloneable {
     prop[7] = ice/total;
 
     for(int i = 0; i<prop.length;++i) {
-      sent[i] = Math.floor(prop[i]*amount);
+      sent[i] = (int) Math.floor(prop[i]*amount);
     }
     int remain = amount;
     for(int i = 0; i<sent.length;++i) {
@@ -149,13 +162,13 @@ public class ResourceSet implements cloneable {
   public void mine(ResourceSet aSet, int mineRate, Availability availability) {
     int mined[] = new int[numResources];
     int all[] = this.getAll();
-    int availabilities = availability.getAll();
+    int availabilities[] = availability.getAll();
     for(int i = 0;i<mined.length;++i) {
       if (all[i]<=0) {
         mined[i] = 0;
         availabilities[i] = 0;
       } else {
-        mined[i]=(int) mineRate*availabilities[i]/100.0;
+        mined[i]=(int) (mineRate*availabilities[i]/100.0);
         if (mined[i]>all[i]) {
           mined[i] = all[i];
           availabilities[i] = 0;

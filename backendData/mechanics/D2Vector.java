@@ -1,5 +1,7 @@
+package flatSpace.backendData.mechanics;
+
 public interface D2Vector extends Vector {
   public Number x();
   public Number y();
-  public Vector2d unitVector() {}
+  public Vector2d unitVector();
 }

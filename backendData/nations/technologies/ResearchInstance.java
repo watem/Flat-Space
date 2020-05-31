@@ -1,3 +1,7 @@
+package flatSpace.backendData.nations.technologies;
+
+import flatSpace.backendData.nations.Nation;
+
 public class ResearchInstance {
   Nation nation;
   Technology tech;
