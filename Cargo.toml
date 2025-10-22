@@ -1,0 +1,9 @@
+[package]
+name = "flat-space"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+macroquad = "0.4.14"
+rand = "0.10.0-rc.0"
+trpl = "0.3.0"
