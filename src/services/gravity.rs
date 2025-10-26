@@ -1,6 +1,10 @@
 use rand::distr::{Distribution};
 use rand::{rng, Rng};
-use crate::model::real_space::physics::{Body, CoM, XY};
+use crate::model::game::Game;
+use crate::model::real_space::physics::{Accel, AccelerationObject, Body, CoM, Positional};
+use crate::model::real_space::physics::Body::{MassBody, MasslessBody};
+use crate::model::real_space::physics::SpaceDimension::Standard;
+use crate::model::real_space::xy::XY;
 
 mod barnes_hut;
 pub mod samples;
@@ -10,35 +14,19 @@ const G: f64 = 6.67430e-8; //m^3*(1000kg)^-1*s^-2
 const SOFT: f64 = 10.0;
 const TIME_STEP: f64 = 20.0;
 static mut TMP_BOUNDS: f64 = 0.0;
-fn grav(body: &mut Body, com: &XY, mass: f64) {
-    let r = com.distance(&body.pos);
-    let a = com.subtract(&body.pos).unit().multiply(G * mass / (r + SOFT).powi(2));
-    body.accel.add_self(&a);
+fn grav(game: &mut Game, system: usize, id: usize, body_pos: XY, r: f64, com: &CoM) {
+    let a = com.pos().subtract(&body_pos).unit().multiply(G * com.mass() / (r + SOFT).powi(2));
+    game.mut_body(system, id).accel(&a);
+    // body.accel(&a);
 }
 
 fn apply_grav(bodies: &mut Vec<Body>, dt:f64) -> CoM {
     let mut com = CoM::zero();
     for body in bodies
     {
-        com.add_self(body.step(dt));
-        body.accel.set(&XY::zero());
-        unsafe {
-            let max = TMP_BOUNDS * 0.9;
-            if body.pos.get_x().abs() >= max {
-                let sgn = body.pos.get_x().signum();
-                println!("Updating x pos of object {}", body.pos.str(Some(3)));
-                body.pos.set(&XY::new(sgn * max, body.pos.get_y()));
-                body.vel.set(&XY::new(-sgn/100., body.vel.get_y()));
-                println!("Updated x pos of object {}", body.pos.str(Some(3)));
-            }
-            if body.pos.get_y().abs() >= max {
-                let sgn = body.pos.get_y().signum();
-                println!("Updating y pos of object {}", body.pos.str(Some(3)));
-                body.pos.set(&XY::new(body.pos.get_x(), sgn * max));
-                body.vel.set(&XY::new(body.vel.get_x(), -sgn/100.));
-                println!("Updated y pos of object {}", body.pos.str(Some(3)));
-            }
-        }
+        // com.add_self(body.time_step(dt));  // TODO: is CoM update still needed?
+        body.time_step(dt);
+        body.reset_accel();
     }
     com
 }
@@ -46,7 +34,8 @@ fn apply_grav(bodies: &mut Vec<Body>, dt:f64) -> CoM {
 fn correct_com(bodies: &mut Vec<Body>, com: &CoM) {
     for body in bodies
     {
-        body.pos.add_self(&com.pos().multiply(-1.0))
+        todo!("Is this still needed?")
+        // body.pos().add_self(&com.pos().multiply(-1.0))
     }
 }
 
@@ -58,20 +47,21 @@ enum SpeedType
     Rand,
 }
 
-fn physics_body(mass: f64, dist_pos: &impl Distribution<f64>, dis_vel: &impl Distribution<f64>, speed_type: SpeedType) -> Body {
+fn physics_body(mass: f64, dist_pos: &impl Distribution<f64>, dis_vel: &impl Distribution<f64>, speed_type: SpeedType, system: usize) -> Body {
     let pos = XY::random_radial(&dist_pos);
     let base_v: f64 = match speed_type {
-        SpeedType::Const(mass) => mass.sqrt() * (G / pos.rad()).sqrt(),
+        SpeedType::Const(mass) => mass.sqrt() * (G / pos.radius()).sqrt(),
         SpeedType::None => 0.0,
-        SpeedType::Rand => rng().sample(dis_vel) * (G / pos.rad()).sqrt(),
+        SpeedType::Rand => rng().sample(dis_vel) * (G / pos.radius()).sqrt(),
     };
 
     let vel = pos.rotate_90().unit().multiply(base_v);
+    let obj = Standard(AccelerationObject::new(pos, vel, XY::zero(), system));
     if mass > 0.0 {
-        let b = Body{pos, vel, accel: XY::zero(), mass};
+        let b = MassBody(mass, obj);
         return b;
     }
 
-    let b = Body{pos, vel, accel: XY::zero(), mass: 0.0};
+    let b = MasslessBody(obj);
     b
 }

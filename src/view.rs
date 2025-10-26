@@ -1,5 +1,5 @@
 use macroquad::prelude::next_frame;
-use crate::model::real_space::physics::XY;
+use crate::model::real_space::xy::XY;
 
 pub mod canvas;
 mod kb;

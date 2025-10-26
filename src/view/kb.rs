@@ -1,5 +1,5 @@
 use macroquad::input::{is_key_down, is_key_pressed, mouse_wheel, KeyCode};
-use crate::model::real_space::physics::XY;
+use crate::model::real_space::xy::XY;
 use crate::view::{Focus, SystemView, View};
 
 impl View
@@ -111,23 +111,23 @@ impl SystemView
         if is_key_pressed(KeyCode::Left) {
             let change = XY::new(-movement_zoom, 0.0);
             self.focus = Focus::Position(self.centre().plus(&change));
-            println!("<- pressed: centre.x={}, d={}", self.centre().get_x(), 4.0/self.zoom);
+            println!("<- pressed: centre.x={}, d={}", self.centre().x(), 4.0/self.zoom);
         }
         if is_key_pressed(KeyCode::Right) {
             let change = XY::new(movement_zoom, 0.0);
             self.focus = Focus::Position(self.centre().plus(&change));
-            println!("-> pressed: centre.x={}, d={}", self.centre().get_x(), 4.0/self.zoom);
+            println!("-> pressed: centre.x={}, d={}", self.centre().x(), 4.0/self.zoom);
         }
 
         if is_key_pressed(KeyCode::Up) {
             let change = XY::new(0.0, movement_zoom);
             self.focus = Focus::Position(self.centre().plus(&change));
-            println!("^ pressed: centre.y={}, d={}", self.centre().get_y(), 4.0/self.zoom);
+            println!("^ pressed: centre.y={}, d={}", self.centre().y(), 4.0/self.zoom);
         }
         if is_key_pressed(KeyCode::Down) {
             let change = XY::new(0.0, -movement_zoom);
             self.focus = Focus::Position(self.centre().plus(&change));
-            println!("v pressed: centre.y={}, d={}", self.centre().get_y(), 4.0/self.zoom);
+            println!("v pressed: centre.y={}, d={}", self.centre().y(), 4.0/self.zoom);
         }
     }
 }
