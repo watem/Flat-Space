@@ -24,8 +24,8 @@ pub mod canvas {
 
         pub fn write_paused(&self)
         {
-            let mid_x: f32 = screen_width() / 2.0 - self.get_system().centre().x() as f32;
-            let mid_y: f32 = screen_height() / 2.0 + self.get_system().centre().y() as f32;
+            let mid_x: f32 = screen_width() / 2f32;
+            let mid_y: f32 = screen_height() / 2f32;
             draw_text("PAUSED", mid_x - 48., mid_y + 8., 32., ORANGE);
         }
     }

@@ -14,8 +14,14 @@ const G: f64 = 6.67430e-8; //m^3*(1000kg)^-1*s^-2
 const SOFT: f64 = 10.0;
 const TIME_STEP: f64 = 20.0;
 static mut TMP_BOUNDS: f64 = 0.0;
+
+
+/* Acceleration due to the force of gravity */
+fn f_g(mass: f64, r: f64) -> f64 {
+    G * mass / r.powi(2)
+}
 fn grav(game: &mut Game, system: usize, id: usize, body_pos: XY, r: f64, com: &CoM) {
-    let a = com.pos().subtract(&body_pos).unit().multiply(G * com.mass() / (r + SOFT).powi(2));
+    let a = com.pos().subtract(&body_pos).unit().multiply(f_g(com.mass(),r + SOFT));
     game.mut_body(system, id).accel(&a);
     // body.accel(&a);
 }
@@ -45,6 +51,12 @@ enum SpeedType
     None,
     Const(f64),
     Rand,
+}
+
+fn rotational_velocity(mass: f64, r: f64) -> f64
+{
+    let a = f_g(mass, r);
+    (a / r).sqrt()
 }
 
 fn physics_body(mass: f64, dist_pos: &impl Distribution<f64>, dis_vel: &impl Distribution<f64>, speed_type: SpeedType, system: usize) -> Body {

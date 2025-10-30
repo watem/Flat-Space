@@ -1,4 +1,4 @@
-use macroquad::input::{is_key_down, is_key_pressed, mouse_wheel, KeyCode};
+use macroquad::input::{is_key_down, is_key_pressed, is_mouse_button_pressed, mouse_position, mouse_wheel, KeyCode, MouseButton};
 use crate::model::real_space::xy::XY;
 use crate::view::{Focus, SystemView, View};
 
@@ -85,8 +85,10 @@ impl View
 
 impl SystemView
 {
-    pub fn do_key_press(self: &mut SystemView)
+    pub fn do_key_press(&mut self)
     {
+        // TODO: zooming in and out does not preserve the centre
+        // TODO: moving with arrows does not move by the same relative amount at different zoom levels
         if is_key_pressed(KeyCode::LeftBracket) {
             self.zoom /= 2.0;
             println!("[ pressed. Zoom: {}", self.zoom);
@@ -128,6 +130,27 @@ impl SystemView
             let change = XY::new(0.0, -movement_zoom);
             self.focus = Focus::Position(self.centre().plus(&change));
             println!("v pressed: centre.y={}, d={}", self.centre().y(), 4.0/self.zoom);
+        }
+
+        self.do_mouse_press();
+    }
+
+    fn do_mouse_press(&mut self) {
+        if is_mouse_button_pressed(MouseButton::Left) {
+            let (x, y) = mouse_position();
+            // TODO: convert to system space
+            self.focus = Focus::Position(XY::new(x.into(), y.into()));
+            // TODO: find if object is nearby enough
+            // self.focus = Focus::Body(body_id);
+        }
+
+        if is_mouse_button_pressed(MouseButton::Right) {
+            let (x, y) = mouse_position();
+            // TODO: convert to system space
+            // TODO: find if object is nearby enough
+            // TODO: add/remove object from tracking
+            // TODO: while tracking, store positions in Vec
+            // TODO: while tracking, render past positions
         }
     }
 }
