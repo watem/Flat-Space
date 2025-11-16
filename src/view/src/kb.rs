@@ -1,6 +1,7 @@
 use macroquad::input::{is_key_down, is_key_pressed, is_mouse_button_pressed, mouse_position, mouse_wheel, KeyCode, MouseButton};
-use crate::model::real_space::xy::XY;
-use crate::view::{Focus, SystemView, View};
+use gravity::model::physics::Focus;
+use gravity::model::xy::XY;
+use crate::view::view::{SystemView, View};
 
 impl View
 {
@@ -96,6 +97,9 @@ impl SystemView
         if is_key_pressed(KeyCode::RightBracket) {
             self.zoom *= 2.0;
             println!("] pressed. Zoom: {}", self.zoom);
+        }
+        if is_key_pressed(KeyCode::Home) {
+            self.focus = Focus::Position(XY::zero());
         }
 
         if mouse_wheel().1 > 0.0 && is_key_down(KeyCode::LeftShift)

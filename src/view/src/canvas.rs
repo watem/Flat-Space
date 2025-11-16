@@ -1,8 +1,9 @@
+
 pub mod canvas {
     use macroquad::color::{Color, BLACK, ORANGE, WHITE};
     use macroquad::prelude::{clear_background, draw_circle, draw_text, next_frame, screen_height, screen_width};
-    use crate::model::real_space::xy::XY;
-    use crate::view::{View};
+    use gravity::model::xy::XY;
+    use crate::view::view::View;
 
     impl View
     {

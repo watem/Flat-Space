@@ -1,6 +1,6 @@
-use macroquad::miniquad::CursorIcon::Default;
-use crate::model::real_space::physics::{Body, System};
+use std::process::id;
 use game_options::Options;
+use gravity::model::physics::{Body, System};
 
 pub mod game_options;
 
@@ -10,37 +10,23 @@ pub struct Game
     options: Options
 }
 
-pub struct Demo
-{
-    pub game: Game,
-}
-
-impl Demo
-{
-    pub fn new() -> Demo {
-        let systems = Vec::with_capacity(1);
-        Demo{game: Game{systems, options: Options::empty()}}
-    }
-
-    pub fn bodies(&self) -> &Vec<Body>
-    {
-        &self.game.systems[0].bodies
-    }
-
-    pub fn bodies_m(&mut self) -> &mut Vec<Body>
-    {
-        &mut self.game.systems[0].bodies
-    }
-
-    pub fn game(&mut self) -> &mut Game
-    {
-        &mut self.game
-    }
-}
-
 impl Game {
+    pub fn new(n_systems: usize) -> Game {
+        let mut systems: Vec<System> = Vec::with_capacity(n_systems);
+
+        Game{systems, options: Options::empty()}
+    }
+
     pub fn system(&self, id: usize) -> &System {
         self.systems.get(id).unwrap()
+    }
+
+    pub fn system_mut(&mut self, id: usize) -> &mut System {
+        self.systems.get_mut(id).unwrap()
+    }
+
+    pub fn systems_mut(&mut self) -> &mut Vec<System> {
+        &mut self.systems
     }
 
     pub fn body(&self, system: usize, id: usize) -> &Body {

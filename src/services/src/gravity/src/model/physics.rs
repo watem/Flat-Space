@@ -1,5 +1,4 @@
-use crate::model::game::Game;
-use crate::model::real_space::xy::XY;
+use crate::model::xy::XY;
 
 pub struct CoM
 {
@@ -77,11 +76,22 @@ impl CentredBox {
 pub struct System {
     pub name: String,
     pub bodies: Vec<Body>,
+    id: usize,
 }
 
+static mut SYSTEM_ID: usize = 0;
 impl System {
     pub fn new(name: String, bodies: Vec<Body>) -> System {
-        System{name, bodies}
+        let id = unsafe {
+            let id = SYSTEM_ID;
+            SYSTEM_ID += 1;
+            id
+        };
+        System{name, bodies, id}
+    }
+
+    pub fn id(&self) -> usize {
+        self.id
     }
 }
 
@@ -92,12 +102,12 @@ pub enum Focus
 }
 
 pub trait Positional {
-    fn pos(&self, game: &Game) -> XY;
-    fn vel(&self, game: &Game) -> XY;
+    fn pos(&self, system: &System) -> XY;
+    fn vel(&self, system: &System) -> XY;
 
     fn time_step(&mut self, dt: f64);
 
-    fn system<'game>(&self, game: &'game Game) -> &'game System;
+    // fn system<'game>(&self, game: &'game Game) -> &'game System;
 }
 
 pub trait Accel {
@@ -123,11 +133,11 @@ impl AccelerationObject {
 }
 
 impl Positional for AccelerationObject {
-    fn pos(&self, _game: &Game) -> XY {
+    fn pos(&self, _system: &System) -> XY {
         self.pos.clone()
     }
 
-    fn vel(&self, _game: &Game) -> XY {
+    fn vel(&self, _system: &System) -> XY {
         self.vel.clone()
     }
 
@@ -137,9 +147,9 @@ impl Positional for AccelerationObject {
         self.pos += d_pos;
     }
 
-    fn system<'game>(&self, game: &'game Game) -> &'game System {
-        game.system(self.system)
-    }
+    // fn system<'game>(&self, game: &'game Game) -> &'game System {
+    //     game.system(self.system)
+    // }
 }
 
 impl Accel for AccelerationObject {
@@ -167,18 +177,18 @@ impl RotationalObject {
 }
 
 impl Positional for RotationalObject {
-    fn pos(&self, game: &Game) -> XY {
+    fn pos(&self, system: &System) -> XY {
         match &self.focus {
             Focus::Position(p) => {
                 p.clone() + XY::radial(self.rad, self.angle)
             }
             Focus::Body(b) => {
-                self.system(game).bodies.get(*b).unwrap().pos(game) + XY::radial(self.rad, self.angle)
+                system.bodies.get(*b).unwrap().pos(system) + XY::radial(self.rad, self.angle)
             }
         }
     }
 
-    fn vel(&self, _game: &Game) -> XY {
+    fn vel(&self, _system: &System) -> XY {
         let v = XY::radial(self.rad, self.angle).rotate_90() * self.angular_velocity;
         match &self.focus {
             Focus::Position(_) => v,
@@ -190,9 +200,9 @@ impl Positional for RotationalObject {
         self.angle += self.angular_velocity * dt;
     }
 
-    fn system<'game>(&self, game: &'game Game) -> &'game System {
-        game.system(self.system)
-    }
+    // fn system<'game>(&self, game: &'game Game) -> &'game System {
+    //     game.system(self.system)
+    // }
 }
 
 pub enum SpaceDimension {
@@ -201,46 +211,46 @@ pub enum SpaceDimension {
 }
 
 impl Positional for SpaceDimension {
-    fn pos(&self, game: &Game) -> XY {
+    fn pos(&self, system: &System) -> XY {
         match self {
-            SpaceDimension::Standard(P) => {P.pos(game)}
-            SpaceDimension::Rotating(P) => {P.pos(game)}
+            SpaceDimension::Standard(p) => {p.pos(system)}
+            SpaceDimension::Rotating(p) => {p.pos(system)}
         }
     }
 
-    fn vel(&self, game: &Game) -> XY {
+    fn vel(&self, system: &System) -> XY {
         match self {
-            SpaceDimension::Standard(P) => {P.vel(game)}
-            SpaceDimension::Rotating(P) => {P.vel(game)}
+            SpaceDimension::Standard(p) => {p.vel(system)}
+            SpaceDimension::Rotating(p) => {p.vel(system)}
         }
     }
 
     fn time_step(&mut self, dt: f64) {
         match self {
-            SpaceDimension::Standard(P) => {P.time_step(dt)}
-            SpaceDimension::Rotating(P) => {P.time_step(dt)}
+            SpaceDimension::Standard(p) => {p.time_step(dt)}
+            SpaceDimension::Rotating(p) => {p.time_step(dt)}
         }
     }
 
-    fn system<'game>(&self, game: &'game Game) -> &'game System {
-        match self {
-            SpaceDimension::Standard(P) => {P.system(game)}
-            SpaceDimension::Rotating(P) => {P.system(game)}
-        }
-    }
+    // fn system<'game>(&self, system: &System) -> &'game System {
+    //     match self {
+    //         SpaceDimension::Standard(p) => {p.system(game)}
+    //         SpaceDimension::Rotating(p) => {p.system(game)}
+    //     }
+    // }
 }
 
 impl Accel for SpaceDimension {
     fn accel(&mut self, accel: &XY) {
         match self {
-            SpaceDimension::Standard(P) => {P.accel(accel);}
+            SpaceDimension::Standard(p) => {p.accel(accel);}
             SpaceDimension::Rotating(_) => {}  // Cannot accelerate, do nothing
         }
     }
 
     fn reset_accel(&mut self) {
         match self {
-            SpaceDimension::Standard(P) => P.reset_accel(),
+            SpaceDimension::Standard(p) => p.reset_accel(),
             SpaceDimension::Rotating(_) => {}  // Cannot accelerate, do nothing
         }
     }
@@ -252,13 +262,13 @@ pub enum Body {
 }
 
 impl Body {
-    pub fn com(&self, game: &Game) -> CoM {
+    pub fn com(&self, system: &System) -> CoM {
         let mass = match self {
             Body::MassBody(m, _) => *m,
             Body::MasslessBody(_) => 0.0
         };
 
-        CoM{pos: self.pos(game), mass}
+        CoM{pos: self.pos(system), mass}
     }
 
     pub fn new(mass: f64, dimension: SpaceDimension) -> Body {
@@ -271,47 +281,47 @@ impl Body {
 }
 
 impl Positional for Body {
-    fn pos(&self, game: &Game) -> XY {
+    fn pos(&self, system: &System) -> XY {
         match self {
-            Body::MassBody(_, P) => {P.pos(game)}
-            Body::MasslessBody(P) => {P.pos(game)}
+            Body::MassBody(_, p) => {p.pos(system)}
+            Body::MasslessBody(p) => {p.pos(system)}
         }
     }
 
-    fn vel(&self, game: &Game) -> XY {
+    fn vel(&self, system: &System) -> XY {
         match self {
-            Body::MassBody(_, P) => {P.vel(game)}
-            Body::MasslessBody(P) => {P.vel(game)}
+            Body::MassBody(_, p) => {p.vel(system)}
+            Body::MasslessBody(p) => {p.vel(system)}
         }
     }
 
     fn time_step(&mut self, dt: f64) {
         match self {
-            Body::MassBody(_, P) => {P.time_step(dt)}
-            Body::MasslessBody(P) => {P.time_step(dt); }
+            Body::MassBody(_, p) => {p.time_step(dt)}
+            Body::MasslessBody(p) => {p.time_step(dt); }
         }
     }
 
-    fn system<'game>(&self, game: &'game Game) -> &'game System {
-        match self {
-            Body::MassBody(_, P) => {P.system(game)}
-            Body::MasslessBody(P) => {P.system(game)}
-        }
-    }
+    // fn system<'game>(&self, game: &'game Game) -> &'game System {
+    //     match self {
+    //         Body::MassBody(_, p) => {p.system(game)}
+    //         Body::MasslessBody(p) => {p.system(game)}
+    //     }
+    // }
 }
 
 impl Accel for Body {
     fn accel(&mut self, accel: &XY) {
         match self {
-            Body::MassBody(_, P) => P.accel(accel),
-            Body::MasslessBody(P) => P.accel(accel)
+            Body::MassBody(_, p) => p.accel(accel),
+            Body::MasslessBody(p) => p.accel(accel)
         }
     }
 
     fn reset_accel(&mut self) {
         match self {
-            Body::MassBody(_, P) => P.reset_accel(),
-            Body::MasslessBody(P) => P.reset_accel()
+            Body::MassBody(_, p) => p.reset_accel(),
+            Body::MasslessBody(p) => p.reset_accel()
         }
     }
 }
@@ -322,4 +332,12 @@ pub enum Quadrant {
     NorthWest,
     SouthEast,
     SouthWest,
+}
+
+#[allow(dead_code)]
+pub enum SpeedType
+{
+    None,
+    Const(f64),
+    Rand,
 }

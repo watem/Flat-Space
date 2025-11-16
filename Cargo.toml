@@ -1,9 +1,16 @@
+[workspace]
+members = ["src/view", "src/model", "src/services", "src/services/src/gravity", "src/view_model", "src/flat_space_examples"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
 [package]
 name = "flat_space"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-macroquad = "0.4.14"
+services = { path = "src/services" }
 rand = "0.10.0-rc.0"
 trpl = "0.3.0"
+macroquad = "0.4.14"

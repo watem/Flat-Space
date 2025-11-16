@@ -1,6 +1,6 @@
 use rand::distr::{Distribution, Uniform};
 use rand::Rng;
-use crate::model::real_space::physics::Quadrant;
+use crate::model::physics::Quadrant;
 
 #[derive(Copy, Clone)]
 pub struct XY {

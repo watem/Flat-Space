@@ -1,0 +1,16 @@
+[package]
+name = "flat_space_examples"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+macroquad = "0.4.14"
+view = { path = "../view" }
+gravity = { path = "../services/src/gravity" }
+model = {path = "../model"}
+
+[dev-dependencies]
+macroquad = "0.4.14"
+
+[lints]
+workspace = true

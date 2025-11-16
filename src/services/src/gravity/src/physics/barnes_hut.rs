@@ -6,10 +6,10 @@
  * Minimum # nodes with a full tree of size n is 4n/3.
  * More common looks to be ~1.9*n. 2n should be a good estimate to not need to grow too often.
  */
-use crate::model::game::Game;
-use crate::model::real_space::physics::{Body, CentredBox, CoM, Positional, Quadrant, SpaceDimension};
-use crate::model::real_space::xy::XY;
-use crate::services::gravity::grav;
+use crate::model::physics::{Body, CentredBox, CoM, Positional, Quadrant, SpaceDimension, System};
+use crate::model::xy::XY;
+use crate::physics::gravity::grav;
+// use crate::services_::gravity::grav;
 
 static THETA_ACC: f64 = 0.25;
 
@@ -48,23 +48,23 @@ impl BarnesHutQuadTree {
     pub fn size(&self) -> usize {
         self.nodes.len()
     }
-    pub fn add_all(&mut self, game: &Game, bodies: &[Body]) {
-        for (id, body) in bodies.iter().enumerate() {
+    pub fn add_all(&mut self, system: &System) {
+        for (id, body) in system.bodies.iter().enumerate() {
             match body {
-                Body::MassBody(mass, p) => {self.insert(game, p, *mass, id);}
+                Body::MassBody(mass, p) => {self.insert(system, p, *mass, id);}
                 _ => {}
             }
         }
     }
 
-    fn apply_branch(&self, game: &mut Game, branch: Option<usize>, body_pos: XY, system: usize, id: usize)
+    fn apply_branch(&self, system: &mut System, branch: Option<usize>, body_pos: XY, id: usize)
     {
         match branch {
-            Some(node_id) => {self.apply_r(game, node_id, body_pos, system, id)}
+            Some(node_id) => {self.apply_r(system, node_id, body_pos, id)}
             None => {}
         }
     }
-    fn apply_r(&self, game: &mut Game, node_id: usize, body_pos: XY, system: usize, id: usize)
+    fn apply_r(&self, system: &mut System, node_id: usize, body_pos: XY, id: usize)
     {
         let node = &self.nodes[node_id];
         if node.id.is_some_and(|n| {n == id})  // FIXME: ids are not being set properly in
@@ -76,30 +76,30 @@ impl BarnesHutQuadTree {
         let sd = node.boundary.r / d;
 
         if sd <= THETA_ACC || node.is_leaf() {
-            grav(game, system, id, body_pos, d, &node.com);
+            grav(system, id, body_pos, d, &node.com);
         }
         else {
-            self.apply_branch(game, node.south_west, body_pos, system, id);
-            self.apply_branch(game, node.south_east, body_pos, system, id);
-            self.apply_branch(game, node.north_west, body_pos, system, id);
-            self.apply_branch(game, node.north_east, body_pos, system, id);
+            self.apply_branch(system, node.south_west, body_pos, id);
+            self.apply_branch(system, node.south_east, body_pos, id);
+            self.apply_branch(system, node.north_west, body_pos, id);
+            self.apply_branch(system, node.north_east, body_pos, id);
         }
     }
-    pub fn apply(&self, game: &mut Game, system: usize, id: usize)
+    pub fn apply(&self, system: &mut System, id: usize)
     {
-        let body_pos = game.body(system, id).pos(game);
+        let body_pos = system.bodies[id].pos(system);
         match self.root {
             None => {
                 return;
             }
             Some(root) => {
-                self.apply_r(game, root, body_pos, system, id);
+                self.apply_r(system, root, body_pos, id);
             }
         }
     }
-    pub fn apply_all(&self, game: &mut Game, system: usize, n_bodies: usize) {
+    pub fn apply_all(&self, system: &mut System, n_bodies: usize) {
         for i in 0..n_bodies {
-            self.apply(game, system, i);
+            self.apply(system, i);
         }
     }
 
@@ -123,7 +123,7 @@ impl BarnesHutQuadTree {
         node_id
     }
 
-    fn grow(&mut self, mut root_id: usize, game: &Game, space: &SpaceDimension, target: &CoM, id: usize) {
+    fn grow(&mut self, mut root_id: usize, system: &System, space: &SpaceDimension, target: &CoM, id: usize) {
         // panic!("Grow not implemented correctly yet!");
         let com = self.nodes[root_id].com.clone();
 
@@ -138,7 +138,7 @@ impl BarnesHutQuadTree {
             }
         }
         self.root = Some(root_id);
-        self.insert(game, space, target.mass(), id);
+        self.insert(system, space, target.mass(), id);
     }
 
     fn _node_quadrant(original_bounds: &CentredBox, point: &XY, grow: bool) -> (CentredBox, Quadrant) {
@@ -245,11 +245,11 @@ impl BarnesHutQuadTree {
         self._new_node(node_id, &leaf_info.com2, Some(leaf_info.id2));
     }
 
-    pub fn insert(&mut self, game: &Game, space: &SpaceDimension, mass: f64, id: usize) {
+    pub fn insert(&mut self, system: &System, space: &SpaceDimension, mass: f64, id: usize) {
         if mass <= 0.0 {
             return;  // No impact from these sources
         }
-        let pos = &space.pos(game);
+        let pos = &space.pos(system);
         let com = CoM::new(pos, mass);
         match self.root {
             None => {
@@ -269,7 +269,7 @@ impl BarnesHutQuadTree {
                     self.insert_r(root, &com, id);
                 }
                 else {
-                    self.grow(root, game, space, &com, id)
+                    self.grow(root, system, space, &com, id)
                 }
 
             }
