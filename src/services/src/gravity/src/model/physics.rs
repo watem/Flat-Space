@@ -1,3 +1,4 @@
+use crate::model::physics::Focus::Position;
 use crate::model::xy::XY;
 
 pub struct CoM
@@ -101,6 +102,17 @@ pub enum Focus
     Body(usize)
 }
 
+impl Focus {
+    pub fn resolve(&self, system: &System) -> XY {
+        match self {
+            Position(pos) => pos.clone(),
+            Focus::Body(id) => {
+                system.bodies.get(*id).unwrap().pos(system)
+            }
+        }
+    }
+}
+
 pub trait Positional {
     fn pos(&self, system: &System) -> XY;
     fn vel(&self, system: &System) -> XY;
@@ -173,6 +185,10 @@ pub struct RotationalObject {
 impl RotationalObject {
     pub fn new(focus: Focus, rad: f64, angular_velocity: f64, angle: f64, system: usize) -> RotationalObject {
         RotationalObject{focus, rad, angular_velocity, angle, system}
+    }
+    
+    pub fn zero(system: usize) -> RotationalObject {
+        RotationalObject{focus: Position(XY::zero()), rad: 0.0, angular_velocity: 0.0, angle: 0.0, system}
     }
 }
 

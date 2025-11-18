@@ -2,7 +2,7 @@ use rand::distr::{Distribution, Uniform};
 use rand::Rng;
 use crate::model::physics::Quadrant;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct XY {
     x: f64,
     y: f64,
@@ -45,6 +45,9 @@ impl XY {
         Self{x, y}
     }
 
+    pub fn round(&self) -> XY {
+        XY{x: self.x.round(), y: self.y.round()}
+    }
     pub fn radius(&self) -> f64 {
         (self.x * self.x + self.y * self.y).sqrt()
     }

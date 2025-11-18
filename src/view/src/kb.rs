@@ -1,7 +1,7 @@
 use macroquad::input::{is_key_down, is_key_pressed, is_mouse_button_pressed, mouse_position, mouse_wheel, KeyCode, MouseButton};
 use gravity::model::physics::Focus;
 use gravity::model::xy::XY;
-use crate::view::view::{SystemView, View};
+use crate::view::{SystemView, View};
 
 impl View
 {
@@ -113,7 +113,7 @@ impl SystemView
             println!("Shift-Scroll out {}. Zoom: {}", mouse_wheel().1, self.zoom);
         }
 
-        let movement_zoom = 4.0 / self.zoom;
+        let movement_zoom = 40.0 / self.zoom;
         if is_key_pressed(KeyCode::Left) {
             let change = XY::new(-movement_zoom, 0.0);
             self.focus = Focus::Position(self.centre().plus(&change));
@@ -142,19 +142,27 @@ impl SystemView
     fn do_mouse_press(&mut self) {
         if is_mouse_button_pressed(MouseButton::Left) {
             let (x, y) = mouse_position();
-            // TODO: convert to system space
-            self.focus = Focus::Position(XY::new(x.into(), y.into()));
+            let coords = self.screen2coords(&XY::new(x.into(), y.into()));
+            self.focus = Focus::Position(coords);
             // TODO: find if object is nearby enough
             // self.focus = Focus::Body(body_id);
         }
+        // TODO: mouse drag move map
 
-        if is_mouse_button_pressed(MouseButton::Right) {
+        if is_mouse_button_pressed(MouseButton::Right) && is_key_down(KeyCode::LeftShift) {
             let (x, y) = mouse_position();
-            // TODO: convert to system space
-            // TODO: find if object is nearby enough
-            // TODO: add/remove object from tracking
-            // TODO: while tracking, store positions in Vec
-            // TODO: while tracking, render past positions
+            /* TODO: convert to system space
+               TODO: find if object is nearby enough
+               TODO: add/remove object from tracking
+               TODO: while tracking, store positions in Vec
+               TODO: while tracking, render past positions
+             */
+        }
+        else if is_mouse_button_pressed(MouseButton::Right) && is_key_down(KeyCode::LeftControl) {
+            // TODO: get object's gravity vectors to see sources of acceleration
+        }
+        else if is_mouse_button_pressed(MouseButton::Right) {
+            // TODO: item interaction menu
         }
     }
 }

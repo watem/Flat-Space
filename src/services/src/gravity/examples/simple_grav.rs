@@ -3,14 +3,13 @@ extern crate gravity;
 use rand::distr::Uniform;
 use rand::{rng, Rng};
 use flat_space_examples::grav_examples::{demo_loop, linear_distribution};
-use flat_space_examples::{demo_view, Demo};
+use flat_space_examples::Demo;
 use gravity::model::physics::{AccelerationObject, Body, CentredBox, System};
 use gravity::model::physics::SpaceDimension::Standard;
 use gravity::model::physics::SpeedType::Rand;
 use gravity::model::xy::XY;
 use gravity::physics::gravity::physics_body;
 use gravity::samples::sample_grav_loop;
-use view::view::view::View;
 
 #[macroquad::main("Gravity Demo")]
 async fn main() {
@@ -32,7 +31,7 @@ async fn main() {
     }
     let time_step = 20.0;
     let colour_n = 1;
-    let mut demo = Demo::new(10, false, 1, scale);
+    let mut demo = Demo::new(1, true, 1, scale);
     demo.add_system(System::new("Demo".parse().unwrap(), bodies));
     demo_loop(&mut demo, bounds, colour_n, log, time_step, sample_grav_loop).await;
 }

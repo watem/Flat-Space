@@ -1,7 +1,7 @@
 use macroquad::window::next_frame;
 use gravity::model::physics::System;
 use model::game::Game;
-use view::view::view::View;
+use view::view::View;
 
 pub mod grav_examples;
 pub mod demo_view;

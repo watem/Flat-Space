@@ -1,11 +1,10 @@
 use gravity::model::physics::{Positional, System};
-use view::canvas::canvas;
 use view::gravity::model::physics::CentredBox;
 use view::macroquad::prelude::{draw_fps, GOLD, RED, WHITE};
-use view::view::view::View;
+use view::view::View;
 use crate::Demo;
 use gravity::rand::distr::{Distribution, Uniform};
-
+use view::canvas;
 /*
  * Creates a linear distribution where p(start) = 0 and linearly increases to its max value at x=end
  * This distributes points evenly in a circle when placed radially.
@@ -46,10 +45,10 @@ fn system_loop(system: &mut System, draw_system: bool, colour_n: u32, view: &mut
         let mut c = 0;
         for body in &system.bodies {
             if c < colour_n {
-                view.draw_point_demo(&body.pos(system), 8.0, Some(RED));
+                view.draw_point_demo(&body.pos(system), 8.0, Some(RED), system.id());
                 c += 1;
             }
-            view.draw_point_demo(&body.pos(system), 3.0, Some(WHITE));
+            view.draw_point_demo(&body.pos(system), 3.0, Some(WHITE), system.id());
         }
         draw_fps();
     }
